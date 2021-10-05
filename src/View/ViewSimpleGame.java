@@ -1,12 +1,14 @@
+package View;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ViewSimpleGame {
 	public ViewSimpleGame() {
+		
+		// création de l'interface graphique
 		JFrame window = new JFrame("Game");
 		
 		JPanel Globalpanel = new JPanel();
@@ -21,6 +23,7 @@ public class ViewSimpleGame {
 		window.setSize(new Dimension(500, 500));
 		window.add(Globalpanel);
 		window.setLocationRelativeTo(null);
+		// affiche l'interface
 		window.setVisible(true);
 	}
 }

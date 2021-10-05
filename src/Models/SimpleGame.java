@@ -1,4 +1,4 @@
-
+package Models;
 public class SimpleGame extends Game  {
 	
 	//Constructeur
@@ -20,7 +20,6 @@ public class SimpleGame extends Game  {
 	@Override
 	public void initializeGame() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
