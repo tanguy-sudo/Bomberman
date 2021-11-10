@@ -1,6 +1,12 @@
 package Models;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+
+import Controller.AbstractController;
+import Controller.ControllerBombermanGame;
+import Models.agent.Agent;
+import Utils.InfoAgent;
 
 public abstract class Game implements Runnable{
 	//Attributs
@@ -9,7 +15,7 @@ public abstract class Game implements Runnable{
 	protected boolean pIsRunning;
 	private Thread pThread;
 	private long pTime;
-	private PropertyChangeSupport pSupport;
+	protected PropertyChangeSupport pSupport;
 	
 	//Constructeur
 	public Game(int maxturn){

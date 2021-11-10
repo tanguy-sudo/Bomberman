@@ -1,4 +1,10 @@
 package Models;
+
+import java.util.ArrayList;
+
+import Models.agent.Agent;
+import Utils.InfoAgent;
+
 public class SimpleGame extends Game  {
 	
 	//Constructeur
@@ -19,7 +25,7 @@ public class SimpleGame extends Game  {
 
 	@Override
 	public void initializeGame() {
-		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
