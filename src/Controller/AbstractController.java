@@ -9,7 +9,7 @@ public abstract class AbstractController {
 	}
 	
 	// passage manuel d’une étape
-	public void step() {
+	public void step(){
 		this.pGame.step();
 	}
 	

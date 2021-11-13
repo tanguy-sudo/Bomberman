@@ -151,8 +151,10 @@ public class ViewCommand implements PropertyChangeListener {
 	// Mets a jour la valeur du nombre de tours
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		int value = (int) arg0.getNewValue();
-		this.pNumberOfTurnJLabel.setText(value + "");
+		if(arg0.getPropertyName() == "pTurn") {
+			int value = (int) arg0.getNewValue();
+			this.pNumberOfTurnJLabel.setText(value + "");			
+		}
 	}
 	
 	public void setEtat(Etat etat) {

@@ -1,13 +1,8 @@
 package Models;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 
-import Controller.AbstractController;
-import Controller.ControllerBombermanGame;
-import Models.agent.Agent;
-import Utils.InfoAgent;
-
+import View.PanelBomberman;
 public abstract class Game implements Runnable{
 	//Attributs
 	private int pTurn;
@@ -37,12 +32,12 @@ public abstract class Game implements Runnable{
 	
 	// Effectue un seul tour du jeu
 	public void step() {
-		int value = this.pTurn + 1;
-		pSupport.firePropertyChange("pTurn", this.pTurn, value);
-		this.pTurn = value;
 		
-		if(this.gameContinue() && this.pTurn <= this.pMaxturn) {
-			this.takeTurn();			
+		if(this.gameContinue() && this.pTurn < this.pMaxturn) {
+			int value = this.pTurn + 1;
+			pSupport.firePropertyChange("pTurn", this.pTurn, value);
+			this.pTurn = value;
+			this.takeTurn();	
 		}
 		else {
 			this.pIsRunning = false;
@@ -91,7 +86,7 @@ public abstract class Game implements Runnable{
     	this.pTime = (long) (1000 / speed);
     }
 	
-	//MÃ©thodes abstraite
+	//Méthodes abstraite
 	public abstract void gameOver();
 	public abstract void takeTurn();
 	public abstract void initializeGame();

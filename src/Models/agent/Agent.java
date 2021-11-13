@@ -11,22 +11,24 @@ public abstract class Agent{
 		this.pInfoAgent = infoAgent;
 	}
 	
-	public void setMove(AgentAction action) {
+	public void setMove(AgentAction action) {		
 		switch (action) {
 		case MOVE_DOWN:
-			this.pInfoAgent.setY(this.pInfoAgent.getY()-1);
+			this.pInfoAgent.setY(this.pInfoAgent.getY() + 1);
 			break;
 		case MOVE_LEFT:
-			this.pInfoAgent.setX(this.pInfoAgent.getX()-1);
+			this.pInfoAgent.setX(this.pInfoAgent.getX() - 1);
 			break;
 		case MOVE_RIGHT:
-			this.pInfoAgent.setX(this.pInfoAgent.getX()+1);
+			this.pInfoAgent.setX(this.pInfoAgent.getX() + 1);
 			break;
 		case MOVE_UP:
-			this.pInfoAgent.setY(this.pInfoAgent.getY()+1);
-			break;
-		default:
+			this.pInfoAgent.setY(this.pInfoAgent.getY() - 1);
 			break;
 		}
+	}
+	
+	public InfoAgent getAgent() {
+		return this.pInfoAgent;
 	}
 }
