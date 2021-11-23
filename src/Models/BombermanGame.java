@@ -48,11 +48,26 @@ public class BombermanGame extends Game{
 				break;
 			}
 			bomb.setStateBomb(nextState(bomb.getStateBomb()));
+			if(bomb.getStateBomb() == StateBomb.Boom) {
+				destroyWall(bomb.getX(), bomb.getY(), bomb.getRange());
+				for (Iterator<Agent> it = this.pListBombermanEnemy.iterator(); it.hasNext();)
+				{
+					Agent agent = it.next();
+					if(agent.getAgent().getX() >=  (bomb.getX() - 2) 
+							&& agent.getAgent().getX() <= (bomb.getX() + 2)
+							&& agent.getAgent().getY() >= (bomb.getY() - 2)
+							&& agent.getAgent().getY() <= (bomb.getY() + 2)) {
+						it.remove();
+					}
+				}
+			}
 		}
 		
 		Strategy strategy = new SimpleStrategy();
-		for(Agent agent : this.pListBombermanAgent) {
-			if(!strategy.isBlockOff(agent, this)) {
+		for (Iterator<Agent> iterator = this.pListBombermanAgent.iterator(); iterator.hasNext();) {
+			Agent agent = iterator.next();
+			if(strategy.isBlockOff(agent, this)) putBomb(agent.getAgent().getX(), agent.getAgent().getY());
+			else {
 				AgentAction action = null;
 				boolean next = true;
 				while(next) {
@@ -250,6 +265,25 @@ public class BombermanGame extends Game{
 				return StateBomb.Boom;
 		}
 		return state;
+	}
+	
+	public void destroyWall(int coordX, int coordY, int range) {		
+        for (int i = 0; i <= range; i++) {
+            if (coordY + i < this.pBreakable_walls[coordX].length && this.pBreakable_walls[coordX][coordY + i]) {
+            	this.pBreakable_walls[coordX][coordY + i] = false;
+            }
+            if (coordY - i > 0 && this.pBreakable_walls[coordX][coordY - i]) {
+            	this.pBreakable_walls[coordX][coordY - i] = false;
+            }
+        }
+        for (int i = 0; i <= range; i++) {
+            if (coordX + i < this.pBreakable_walls.length && this.pBreakable_walls[coordX + i][coordY]) {
+            	this.pBreakable_walls[coordX + i][coordY] = false;
+            }
+            if (coordX - i > 0 && this.pBreakable_walls[coordX - i][coordY]) {
+            	this.pBreakable_walls[coordX - i][coordY] = false;
+            }
+        }
 	}
 
 }
