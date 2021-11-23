@@ -26,6 +26,8 @@ public abstract class Agent{
 			this.pInfoAgent.setY(this.pInfoAgent.getY() - 1);
 			break;
 		}
+		
+		this.pInfoAgent.setAgentAction(action);
 	}
 	
 	public InfoAgent getAgent() {

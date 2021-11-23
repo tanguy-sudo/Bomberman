@@ -38,29 +38,49 @@ public class BombermanGame extends Game{
 
 	@Override
 	public void takeTurn(){
-		StrategyMove strategyMove = new StrategyMove(this);
+		
+		for(InfoBomb bomb : this.pListBomb) {
+			if(bomb.getStateBomb() == StateBomb.Boom) {
+				this.pListBomb.remove(bomb);
+			}
+		}
+		
+		for(InfoBomb bomb : this.pListBomb) {
+			bomb.setStateBomb(nextState(bomb.getStateBomb()));
+		}
+		
+		Strategy strategy = new SimpleStrategy();
 		for(Agent agent : this.pListBombermanAgent) {
-			if(!isBlockOff(agent, strategyMove)) {
+			if(!strategy.isBlockOff(agent, this)) {
 				AgentAction action = null;
 				boolean next = true;
 				while(next) {
-					action = generateAction();
-					if(strategyMove.isLegalMove(agent, action)) {
-						strategyMove.moveAgent(agent, action);
+					if(agent.getAgent().getType() == 'B') action = strategy.generateActionWithBomb();
+					else action = strategy.generateAction();
+					
+					if(action == AgentAction.PUT_BOMB && !existBomb(agent.getAgent().getX(), agent.getAgent().getY())) {
+						putBomb(agent.getAgent().getX(), agent.getAgent().getY());
+						next = false;
+					}
+					else if(isLegalMove(agent, action)) {
+						EnnemyIsHere(agent, action);
+						moveAgent(agent, action);
 						next = false;
 					}
 			
 				}
 			}
 		}	
+		
 		for(Agent agent : this.pListBombermanEnemy) {
-			if(!isBlockOff(agent, strategyMove)) {
+			if(!strategy.isBlockOff(agent, this)) {
 				AgentAction action = null;
 				boolean next = true;
 				while(next) {
-					action = generateAction();
-					if(strategyMove.isLegalMove(agent, action)) {
-						strategyMove.moveAgent(agent, action);
+					action = strategy.generateAction();
+					if(isLegalMove(agent, action)) {
+						EnnemyIsHere(agent, action);
+						moveAgent(agent, action);
 						next = false;
 					}
 			
@@ -90,27 +110,8 @@ public class BombermanGame extends Game{
 		return true;
 	}
 	
-	public void addBomb(int x, int y) {
-		this.pListBomb.add(new InfoBomb(x, y, 1, StateBomb.Step0));
-	}
-	
 	public InputMap getInputMap() {
 		return this.pInputMap;
-	}
-	
-	private AgentAction generateAction() {
-		Random r = new Random();
-		switch(r.nextInt(4)) {
-			case 0:
-				return AgentAction.MOVE_DOWN;
-			case 1:
-				return AgentAction.MOVE_LEFT;
-			case 2:
-				return AgentAction.MOVE_RIGHT;
-			case 3:
-				return AgentAction.MOVE_UP;
-		}
-		return null;
 	}
 	
 	public boolean[][] getBreakable_walls() {
@@ -136,12 +137,114 @@ public class BombermanGame extends Game{
 		return this.pListItems;
 	}
 	
-	public boolean isBlockOff(Agent agent, StrategyMove strategyMove) {
-		if(strategyMove.isLegalMove(agent, AgentAction.MOVE_DOWN)
-				|| strategyMove.isLegalMove(agent, AgentAction.MOVE_LEFT)
-				|| strategyMove.isLegalMove(agent, AgentAction.MOVE_UP)
-				|| strategyMove.isLegalMove(agent, AgentAction.MOVE_RIGHT)) return false;
-		else return true;
+	public boolean isLegalMove(Agent agent, AgentAction action) {
+		switch (action) {
+			case MOVE_DOWN:
+				if((agent.getAgent().getY() + 1) < (this.pInputMap.getSizeY() - 1)) {
+					if(agent.getAgent().getType() == 'V') return true;
+					else if(!this.pBreakable_walls[agent.getAgent().getX()][agent.getAgent().getY() + 1]) return true;
+					else return false;
+				}
+				else
+					return false;
+			case MOVE_LEFT:
+				if((agent.getAgent().getX() - 1) > 0) {
+					if(agent.getAgent().getType() == 'V') return true;
+					else if(!this.pBreakable_walls[agent.getAgent().getX() - 1][agent.getAgent().getY()]) return true;
+					else return false;
+				}
+				else
+					return false;
+			case MOVE_RIGHT:
+				if((agent.getAgent().getX() + 1) < (this.pInputMap.getSizeX() - 1)) {
+					if(agent.getAgent().getType() == 'V') return true;
+					else if(!this.pBreakable_walls[agent.getAgent().getX() + 1][agent.getAgent().getY()]) return true;
+					else return false;
+				}
+				else
+					return false;
+			case MOVE_UP:
+				if((agent.getAgent().getY() - 1) > 0) {
+					if(agent.getAgent().getType() == 'V') return true;
+					else if(!this.pBreakable_walls[agent.getAgent().getX()][agent.getAgent().getY() - 1]) return true;
+					else return false;
+				}
+			case STOP:
+				return true;
+			default:
+				return false;
+			}
+	}
+
+	public void moveAgent(Agent agent, AgentAction action) {
+		if(action != AgentAction.PUT_BOMB && action != AgentAction.STOP) {
+			agent.setMove(action);
+		}	
+	}
+
+	public void putBomb(int coordX, int coordY) {
+		this.pListBomb.add(new InfoBomb(coordX, coordY, 2, StateBomb.Step0));
+	}
+	
+	public void EnnemyIsHere(Agent monAgent, AgentAction action) {
+		int coordX = monAgent.getAgent().getX();
+		int coordY = monAgent.getAgent().getY();
+		
+		switch (action) {
+			case MOVE_DOWN:
+				coordY = monAgent.getAgent().getY() + 1;
+				break;
+			case MOVE_LEFT:
+				coordX = monAgent.getAgent().getX() - 1;
+				break;
+			case MOVE_RIGHT:
+				coordX = monAgent.getAgent().getX() + 1;
+				break;
+			case MOVE_UP:
+				coordY = monAgent.getAgent().getY() - 1;
+				break;
+		}
+		
+		if(monAgent.getAgent().getType() != 'B') {
+			for(Agent agent : this.pListBombermanAgent) {
+				if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
+					this.pListBombermanAgent.remove(agent);
+					break;
+				}
+			}
+		} else if(monAgent.getAgent().getType() == 'B') {
+			for(Agent agent : this.pListBombermanEnemy) {
+				if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
+					this.pListBombermanAgent.remove(monAgent);
+					break;
+				}
+			}
+		}
+	}
+	
+	public boolean existBomb(int coordX, int coordY) {
+		for(InfoBomb bomb : this.pListBomb) {
+			if(bomb.getX() == coordX && bomb.getY() == coordY) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public StateBomb nextState(StateBomb state) {
+		switch(state) {
+			case Step0:
+				return StateBomb.Step1;
+			case Step1:
+				return StateBomb.Step2;
+			case Step2:
+				return StateBomb.Step3;
+			case Step3:
+				return StateBomb.Boom;
+			case Boom:
+				return StateBomb.Boom;
+		}
+		return state;
 	}
 
 }

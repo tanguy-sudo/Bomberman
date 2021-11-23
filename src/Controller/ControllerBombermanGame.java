@@ -29,7 +29,7 @@ public class ControllerBombermanGame extends AbstractController{
 			
 			ViewCommand viewCommand = new ViewCommand(this);
 			
-			this.pGame = new BombermanGame(20, this.pInputMap);
+			this.pGame = new BombermanGame(100, this.pInputMap);
 			this.pGame.addPropertyChangeListener(viewCommand);
 			this.pGame.init();
 			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);
