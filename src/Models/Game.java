@@ -86,7 +86,7 @@ public abstract class Game implements Runnable{
     	this.pTime = (long) (1000 / speed);
     }
 	
-	//Méthodes abstraite
+	//Mï¿½thodes abstraite
 	public abstract void gameOver();
 	public abstract void takeTurn();
 	public abstract void initializeGame();

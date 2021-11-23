@@ -1,6 +1,7 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import Models.agent.Agent;
 import Models.agent.FabriqueBomberman;
@@ -39,13 +40,13 @@ public class BombermanGame extends Game{
 	@Override
 	public void takeTurn(){
 		
-		for(InfoBomb bomb : this.pListBomb) {
+		for (Iterator<InfoBomb> iterator = this.pListBomb.iterator(); iterator.hasNext();)
+		{
+			InfoBomb bomb = iterator.next();
 			if(bomb.getStateBomb() == StateBomb.Boom) {
-				this.pListBomb.remove(bomb);
+				iterator.remove();
+				break;
 			}
-		}
-		
-		for(InfoBomb bomb : this.pListBomb) {
 			bomb.setStateBomb(nextState(bomb.getStateBomb()));
 		}
 		
@@ -168,7 +169,7 @@ public class BombermanGame extends Game{
 					if(agent.getAgent().getType() == 'V') return true;
 					else if(!this.pBreakable_walls[agent.getAgent().getX()][agent.getAgent().getY() - 1]) return true;
 					else return false;
-				}
+				} else return false;
 			case STOP:
 				return true;
 			default:
@@ -206,14 +207,18 @@ public class BombermanGame extends Game{
 		}
 		
 		if(monAgent.getAgent().getType() != 'B') {
-			for(Agent agent : this.pListBombermanAgent) {
+			for (Iterator<Agent> iterator = this.pListBombermanAgent.iterator(); iterator.hasNext();)
+			{
+				Agent agent = iterator.next();
 				if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
-					this.pListBombermanAgent.remove(agent);
+					iterator.remove();
 					break;
 				}
 			}
 		} else if(monAgent.getAgent().getType() == 'B') {
-			for(Agent agent : this.pListBombermanEnemy) {
+			for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();)
+			{
+				Agent agent = iterator.next();
 				if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
 					this.pListBombermanAgent.remove(monAgent);
 					break;
