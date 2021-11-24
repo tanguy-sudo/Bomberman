@@ -66,7 +66,7 @@ public class BombermanGame extends Game{
 		Strategy strategy = new SimpleStrategy();
 		for (Iterator<Agent> iterator = this.pListBombermanAgent.iterator(); iterator.hasNext();) {
 			Agent agent = iterator.next();
-			if(strategy.isBlockOff(agent, this)) putBomb(agent.getAgent().getX(), agent.getAgent().getY());
+			if(strategy.isBlockOff(agent, this)) putBomb(agent.getAgent().getX(), agent.getAgent().getY(), agent);
 			else {
 				AgentAction action = null;
 				boolean next = true;
@@ -75,12 +75,13 @@ public class BombermanGame extends Game{
 					else action = strategy.generateAction();
 					
 					if(action == AgentAction.PUT_BOMB && !existBomb(agent.getAgent().getX(), agent.getAgent().getY())) {
-						putBomb(agent.getAgent().getX(), agent.getAgent().getY());
+						putBomb(agent.getAgent().getX(), agent.getAgent().getY(), agent);
 						next = false;
 					}
 					else if(isLegalMove(agent, action)) {
 						EnnemyIsHere(agent, action, iterator);
 						moveAgent(agent, action);
+						AgentWalksOnItem(iterator);
 						next = false;
 					}
 			
@@ -200,8 +201,8 @@ public class BombermanGame extends Game{
 		}	
 	}
 
-	public void putBomb(int coordX, int coordY) {
-		this.pListBomb.add(new InfoBomb(coordX, coordY, 2, StateBomb.Step0));
+	public void putBomb(int coordX, int coordY, Agent agent) {
+		this.pListBomb.add(new InfoBomb(coordX, coordY, agent.getRange(), StateBomb.Step0));
 	}
 	
 	public void EnnemyIsHere(Agent monAgent, AgentAction action, Iterator<Agent> itAgent) {
@@ -237,7 +238,6 @@ public class BombermanGame extends Game{
 			{
 				Agent agent = iterator.next();
 				if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
-					//this.pListBombermanAgent.remove(monAgent);
 					itAgent.remove();
 					break;
 				}
@@ -316,6 +316,32 @@ public class BombermanGame extends Game{
 				return ItemType.SKULL;
 		}
 		return null;
+	}
+	
+	public void AgentWalksOnItem(Iterator<Agent> itAgent) {
+		Agent agent = itAgent.next();
+		for(InfoItem item : this.pListItems) {
+			if(item.getX() == agent.getAgent().getX() && item.getY() == agent.getAgent().getY()) {
+				switch(item.getType()) {
+				case FIRE_UP:
+					agent.getEtat().withoutEffects();
+					agent.setRange(agent.getRange() - 1);
+					break;
+				case FIRE_DOWN:
+					agent.getEtat().withoutEffects();
+					agent.setRange(agent.getRange() + 1);
+					break;
+				case FIRE_SUIT:
+					agent.getEtat().invinsible();
+					break;
+				case SKULL:
+					agent.getEtat().skull();
+					break;
+				}
+				this.pListItems.remove(item);
+				break;
+			}
+		}
 	}
 
 }

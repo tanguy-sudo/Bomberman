@@ -1,14 +1,19 @@
 package Models.agent;
 
+import Models.agent.etat.EtatAgent;
+import Models.agent.etat.EtatWithoutEffects;
 import Utils.AgentAction;
-import Utils.ColorAgent;
 import Utils.InfoAgent;
 
 public abstract class Agent{
 	protected InfoAgent pInfoAgent;
+	private EtatAgent pEtat;
+	private int pRange;
 	
 	public Agent(InfoAgent infoAgent) {
 		this.pInfoAgent = infoAgent;
+		this.pEtat = new EtatWithoutEffects(this);
+		this.pRange = 2;
 	}
 	
 	public void setMove(AgentAction action) {		
@@ -32,5 +37,18 @@ public abstract class Agent{
 	
 	public InfoAgent getAgent() {
 		return this.pInfoAgent;
+	}
+	
+	public void setEtat(EtatAgent etat) {
+		this.pEtat = etat;
+	}
+	public EtatAgent getEtat() {
+		return this.pEtat;
+	}
+	public void setRange(int range) {
+		this.pRange = range;
+	}
+	public int getRange() {
+		return this.pRange;
 	}
 }

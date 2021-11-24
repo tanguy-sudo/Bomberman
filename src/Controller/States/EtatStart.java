@@ -2,7 +2,7 @@ package Controller.States;
 import View.*;
 public class EtatStart implements Etat {
 	
-	ViewCommand pViewCommand;
+	private ViewCommand pViewCommand;
 	
 	public EtatStart(ViewCommand viewCommand) {
 		this.pViewCommand = viewCommand;
