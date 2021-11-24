@@ -10,6 +10,7 @@ import Utils.AgentAction;
 import Utils.InfoAgent;
 import Utils.InfoBomb;
 import Utils.InfoItem;
+import Utils.ItemType;
 import Utils.StateBomb;
 import View.PanelBomberman;
 
@@ -50,8 +51,7 @@ public class BombermanGame extends Game{
 			bomb.setStateBomb(nextState(bomb.getStateBomb()));
 			if(bomb.getStateBomb() == StateBomb.Boom) {
 				destroyWall(bomb.getX(), bomb.getY(), bomb.getRange());
-				for (Iterator<Agent> it = this.pListBombermanEnemy.iterator(); it.hasNext();)
-				{
+				for (Iterator<Agent> it = this.pListBombermanEnemy.iterator(); it.hasNext();) {
 					Agent agent = it.next();
 					if(agent.getAgent().getX() >=  (bomb.getX() - 2) 
 							&& agent.getAgent().getX() <= (bomb.getX() + 2)
@@ -79,7 +79,7 @@ public class BombermanGame extends Game{
 						next = false;
 					}
 					else if(isLegalMove(agent, action)) {
-						EnnemyIsHere(agent, action);
+						EnnemyIsHere(agent, action, iterator);
 						moveAgent(agent, action);
 						next = false;
 					}
@@ -88,14 +88,15 @@ public class BombermanGame extends Game{
 			}
 		}	
 		
-		for(Agent agent : this.pListBombermanEnemy) {
+		for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();) {
+			Agent agent = iterator.next();
 			if(!strategy.isBlockOff(agent, this)) {
 				AgentAction action = null;
 				boolean next = true;
 				while(next) {
 					action = strategy.generateAction();
 					if(isLegalMove(agent, action)) {
-						EnnemyIsHere(agent, action);
+						EnnemyIsHere(agent, action, iterator);
 						moveAgent(agent, action);
 						next = false;
 					}
@@ -103,6 +104,7 @@ public class BombermanGame extends Game{
 				}
 			}
 		}	
+		
 		pSupport.firePropertyChange("pGame", null, this);
 	}
 
@@ -202,7 +204,7 @@ public class BombermanGame extends Game{
 		this.pListBomb.add(new InfoBomb(coordX, coordY, 2, StateBomb.Step0));
 	}
 	
-	public void EnnemyIsHere(Agent monAgent, AgentAction action) {
+	public void EnnemyIsHere(Agent monAgent, AgentAction action, Iterator<Agent> itAgent) {
 		int coordX = monAgent.getAgent().getX();
 		int coordY = monAgent.getAgent().getY();
 		
@@ -230,12 +232,13 @@ public class BombermanGame extends Game{
 					break;
 				}
 			}
-		} else if(monAgent.getAgent().getType() == 'B') {
+		} else {
 			for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();)
 			{
 				Agent agent = iterator.next();
 				if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
-					this.pListBombermanAgent.remove(monAgent);
+					//this.pListBombermanAgent.remove(monAgent);
+					itAgent.remove();
 					break;
 				}
 			}
@@ -271,19 +274,48 @@ public class BombermanGame extends Game{
         for (int i = 0; i <= range; i++) {
             if (coordY + i < this.pBreakable_walls[coordX].length && this.pBreakable_walls[coordX][coordY + i]) {
             	this.pBreakable_walls[coordX][coordY + i] = false;
+            	generateItem(coordX, coordY + i);
             }
             if (coordY - i > 0 && this.pBreakable_walls[coordX][coordY - i]) {
             	this.pBreakable_walls[coordX][coordY - i] = false;
+            	generateItem(coordX, coordY - i);
             }
         }
         for (int i = 0; i <= range; i++) {
             if (coordX + i < this.pBreakable_walls.length && this.pBreakable_walls[coordX + i][coordY]) {
             	this.pBreakable_walls[coordX + i][coordY] = false;
+            	generateItem(coordX + i, coordY);
             }
             if (coordX - i > 0 && this.pBreakable_walls[coordX - i][coordY]) {
             	this.pBreakable_walls[coordX - i][coordY] = false;
+            	generateItem(coordX - i, coordY);
             }
         }
+	}
+	
+	public void generateItem(int coordX, int coordY) {
+		Random r = new Random();
+		switch(r.nextInt(3)) {
+			case 2:
+				this.pListItems.add(new InfoItem(coordX, coordY, ramdomItem()));
+				break;
+		}
+		
+	}
+	
+	public ItemType ramdomItem() {
+		Random r = new Random();
+		switch(r.nextInt(4)) {
+			case 0:
+				return ItemType.FIRE_DOWN;
+			case 1:
+				return ItemType.FIRE_SUIT;
+			case 2:
+				return ItemType.FIRE_UP;
+			case 3:
+				return ItemType.SKULL;
+		}
+		return null;
 	}
 
 }
