@@ -53,12 +53,19 @@ public class BombermanGame extends Game{
 				destroyWall(bomb.getX(), bomb.getY(), bomb.getRange());
 				for (Iterator<Agent> it = this.pListBombermanEnemy.iterator(); it.hasNext();) {
 					Agent agent = it.next();
-					if(agent.getAgent().getX() >=  (bomb.getX() - 2) 
-							&& agent.getAgent().getX() <= (bomb.getX() + 2)
-							&& agent.getAgent().getY() >= (bomb.getY() - 2)
-							&& agent.getAgent().getY() <= (bomb.getY() + 2)) {
-						it.remove();
-					}
+				            int posXagent = agent.getAgent().getX();
+				            int posYagent = agent.getAgent().getY();
+				            for (int i = 0; i <= agent.getRange(); i++) {
+				                if (posXagent == bomb.getX()) {
+				                    if ((posYagent == (bomb.getY() + i)) || (posYagent == (bomb.getY() - i))) {
+				                    	it.remove();
+				                    }
+				                } else if (posYagent == bomb.getY()) {
+				                    if ((posXagent == (bomb.getX() + i)) || (posXagent == (bomb.getX() - i))) {
+				                    	it.remove();
+				                    }
+				                }
+				            }
 				}
 			}
 		}
@@ -81,7 +88,7 @@ public class BombermanGame extends Game{
 					else if(isLegalMove(agent, action)) {
 						EnnemyIsHere(agent, action, iterator);
 						moveAgent(agent, action);
-						AgentWalksOnItem(iterator);
+						//AgentWalksOnItem(iterator);
 						next = false;
 					}
 			
@@ -89,7 +96,7 @@ public class BombermanGame extends Game{
 			}
 		}	
 		
-		for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();) {
+		/*for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();) {
 			Agent agent = iterator.next();
 			if(!strategy.isBlockOff(agent, this)) {
 				AgentAction action = null;
@@ -104,7 +111,7 @@ public class BombermanGame extends Game{
 			
 				}
 			}
-		}	
+		}	*/
 		
 		pSupport.firePropertyChange("pGame", null, this);
 	}
@@ -324,18 +331,18 @@ public class BombermanGame extends Game{
 			if(item.getX() == agent.getAgent().getX() && item.getY() == agent.getAgent().getY()) {
 				switch(item.getType()) {
 				case FIRE_UP:
-					agent.getEtat().withoutEffects();
+					//agent.getEtat().withoutEffects();
 					agent.setRange(agent.getRange() - 1);
 					break;
 				case FIRE_DOWN:
-					agent.getEtat().withoutEffects();
+					//agent.getEtat().withoutEffects();
 					agent.setRange(agent.getRange() + 1);
 					break;
 				case FIRE_SUIT:
-					agent.getEtat().invinsible();
+					//agent.getEtat().invinsible();
 					break;
 				case SKULL:
-					agent.getEtat().skull();
+					//agent.getEtat().skull();
 					break;
 				}
 				this.pListItems.remove(item);
