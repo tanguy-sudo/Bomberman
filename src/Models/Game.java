@@ -91,4 +91,5 @@ public abstract class Game implements Runnable{
 	public abstract void takeTurn();
 	public abstract void initializeGame();
 	public abstract boolean gameContinue();
+	public abstract void restart(String mapName);
 }

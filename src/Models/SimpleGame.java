@@ -27,5 +27,10 @@ public class SimpleGame extends Game  {
 	public boolean gameContinue() {
 		return true;
 	}
+	
+	@Override
+	public void restart(String mapName) {
+		
+	}
 
 }

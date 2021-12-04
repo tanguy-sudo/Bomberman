@@ -31,7 +31,7 @@ public class ViewBombermanGame  implements PropertyChangeListener {
 		if(evt.getPropertyName() == "pGame") {
 			BombermanGame game = (BombermanGame) evt.getNewValue();	
 			this.pPanelBomberman.updateInfoGame(game.getBreakable_walls(), game.getListAgent(), game.getListItems(), game.getListBomb());
-			window.setContentPane(pPanelBomberman);
+			this.pPanelBomberman.repaint();
 		}
 	}
 

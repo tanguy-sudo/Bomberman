@@ -8,7 +8,7 @@ public class EtatSkull implements EtatAgent{
 	
 	public EtatSkull(Agent agent) {
 		this.pAgent = agent;
-		this.pAgent.setSkullFor(2);
+		this.pAgent.setSkullFor(4);
 		this.pAgent.getAgent().setSick(true);
 		
 	}
@@ -21,11 +21,12 @@ public class EtatSkull implements EtatAgent{
 
 	@Override
 	public void skull() {	
-		this.pAgent.setSkullFor(2);
+		this.pAgent.setSkullFor(4);
 	}
 
 	@Override
 	public void withoutEffects() {
+		this.pAgent.setEtat(new EtatWithoutEffects(this.pAgent));	
 	}
 
 }

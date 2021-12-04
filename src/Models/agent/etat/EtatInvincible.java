@@ -8,14 +8,14 @@ public class EtatInvincible implements EtatAgent{
 	
 	public EtatInvincible(Agent agent) {
 		this.pAgent = agent;
-		this.pAgent.setInvincibleFor(3);
+		this.pAgent.setInvincibleFor(5);
 		this.pAgent.setSkullFor(0);
 		this.pAgent.getAgent().setInvincible(true);
 	}
 
 	@Override
 	public void invincible() {
-		this.pAgent.setInvincibleFor(3);
+		this.pAgent.setInvincibleFor(5);
 	}
 
 	@Override
@@ -24,6 +24,7 @@ public class EtatInvincible implements EtatAgent{
 
 	@Override
 	public void withoutEffects() {
+		this.pAgent.setEtat(new EtatWithoutEffects(this.pAgent));	
 	}
 
 }

@@ -15,7 +15,7 @@ public abstract class Agent{
 	public Agent(InfoAgent infoAgent) {
 		this.pInfoAgent = infoAgent;
 		this.pEtat = new EtatWithoutEffects(this);
-		this.pRange = 1;
+		this.pRange = 2;
 		this.pInvincibleFor = 0;
 		this.pSkullFor = 0;
 	}

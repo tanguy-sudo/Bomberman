@@ -18,7 +18,7 @@ public class ControllerBombermanGame extends AbstractController{
 	public ControllerBombermanGame(String layout) {
 	
 		try {
-
+			this.pMapName = layout;
 			this.pInputMap = new InputMap(layout);
 			this.pPanelBomberman = new PanelBomberman(this.pInputMap.getSizeX(), 
 													  this.pInputMap.getSizeY(), 

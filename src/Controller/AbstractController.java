@@ -2,9 +2,11 @@ package Controller;
 import Models.*;
 public abstract class AbstractController {
 	protected Game pGame;
+	protected String pMapName;
 	
 	// arrêt et réinitialisation
 	public void restart() {
+		this.pGame.restart(pMapName);
 		this.pGame.init();
 	}
 	

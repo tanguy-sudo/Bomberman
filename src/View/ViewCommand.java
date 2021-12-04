@@ -68,7 +68,7 @@ public class ViewCommand implements PropertyChangeListener {
 		this.pNumberOfTurnJLabel = new JLabel("Turn : 0", JLabel.CENTER);
 		JLabel sliderJLabel = new JLabel("Number of turns per second", JLabel.CENTER);
 		
-		this.slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 2);
+		this.slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
 		
 		window.setSize(new Dimension(800, 400));
 		window.setLocationRelativeTo(null);
