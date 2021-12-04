@@ -88,7 +88,11 @@ public class BombermanGame extends Game{
 					else if(isLegalMove(agent, action)) {
 						EnnemyIsHere(agent, action, iterator);
 						moveAgent(agent, action);
-						//AgentWalksOnItem(iterator);
+						updateEtatAgent(agent);
+						AgentWalksOnItem(agent);
+						System.out.println("Range : " + agent.getRange());
+						System.out.println("Invincible : " + agent.getInvincibleFor());
+						System.out.println("Skull : " + agent.getSkullFor());
 						next = false;
 					}
 			
@@ -325,30 +329,42 @@ public class BombermanGame extends Game{
 		return null;
 	}
 	
-	public void AgentWalksOnItem(Iterator<Agent> itAgent) {
-		Agent agent = itAgent.next();
-		for(InfoItem item : this.pListItems) {
+	public void AgentWalksOnItem(Agent agent) {
+		for(Iterator<InfoItem> iterator = this.pListItems.iterator(); iterator.hasNext();) {
+			InfoItem item = iterator.next();
 			if(item.getX() == agent.getAgent().getX() && item.getY() == agent.getAgent().getY()) {
 				switch(item.getType()) {
 				case FIRE_UP:
-					//agent.getEtat().withoutEffects();
-					agent.setRange(agent.getRange() - 1);
-					break;
-				case FIRE_DOWN:
-					//agent.getEtat().withoutEffects();
+					System.out.println("fire up");
 					agent.setRange(agent.getRange() + 1);
 					break;
+				case FIRE_DOWN:
+					System.out.println("fire down");
+					if(agent.getRange() > 1) agent.setRange(agent.getRange() - 1);
+					break;
 				case FIRE_SUIT:
-					//agent.getEtat().invinsible();
+					System.out.println("invincible");
+					agent.getEtat().invincible();
 					break;
 				case SKULL:
-					//agent.getEtat().skull();
+					System.out.println("skull");
+					agent.getEtat().skull();
 					break;
 				}
-				this.pListItems.remove(item);
+				iterator.remove();
 				break;
 			}
 		}
+	}
+	
+	public void updateEtatAgent(Agent agent) {
+			agent.setInvincibleFor(agent.getInvincibleFor() - 1);
+			if(agent.getInvincibleFor() <= 0) {
+				agent.getAgent().setInvincible(false);
+				agent.getEtat().withoutEffects();	
+			}
+			agent.setSkullFor(agent.getSkullFor() - 1);
+			if(agent.getInvincibleFor() <= 0) agent.getEtat().withoutEffects();	
 	}
 
 }

@@ -8,11 +8,13 @@ public class EtatWithoutEffects implements EtatAgent{
 	
 	public EtatWithoutEffects(Agent agent) {
 		this.pAgent = agent;
+		this.pAgent.getAgent().setInvincible(false);
+		this.pAgent.getAgent().setSick(false);
 	}
 
 	@Override
-	public void invinsible() {
-		this.pAgent.setEtat(new EtatInvinsible(this.pAgent));
+	public void invincible() {
+		this.pAgent.setEtat(new EtatInvincible(this.pAgent));
 	}
 
 	@Override

@@ -9,11 +9,15 @@ public abstract class Agent{
 	protected InfoAgent pInfoAgent;
 	private EtatAgent pEtat;
 	private int pRange;
+	private int pInvincibleFor;
+	private int pSkullFor;
 	
 	public Agent(InfoAgent infoAgent) {
 		this.pInfoAgent = infoAgent;
 		this.pEtat = new EtatWithoutEffects(this);
-		this.pRange = 2;
+		this.pRange = 1;
+		this.pInvincibleFor = 0;
+		this.pSkullFor = 0;
 	}
 	
 	public void setMove(AgentAction action) {		
@@ -50,5 +54,17 @@ public abstract class Agent{
 	}
 	public int getRange() {
 		return this.pRange;
+	}
+	public int getInvincibleFor() {
+		return this.pInvincibleFor;
+	}	
+	public void setInvincibleFor(int nbTurn) {
+		this.pInvincibleFor = nbTurn;
+	}
+	public int getSkullFor() {
+		return this.pSkullFor;
+	}	
+	public void setSkullFor(int nbTurn) {
+		this.pSkullFor = nbTurn;
 	}
 }
