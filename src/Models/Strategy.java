@@ -8,8 +8,7 @@ import Utils.AgentAction;
 public abstract class Strategy {
 
 	
-	public abstract AgentAction generateAction();
-	public abstract AgentAction  generateActionWithBomb();
+	public abstract AgentAction generateAction(Agent agent, BombermanGame game);
 	
 	public boolean isBlockOff(Agent agent, BombermanGame game) {
 		if(game.isLegalMove(agent, AgentAction.MOVE_DOWN)

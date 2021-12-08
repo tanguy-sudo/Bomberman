@@ -1,11 +1,12 @@
 package Models.agent;
 
+import Models.Strategy;
 import Utils.InfoAgent;
 
 public class RajionAgent extends Agent{
 
-	public RajionAgent(InfoAgent infoAgent) {
-		super(infoAgent);
+	public RajionAgent(InfoAgent infoAgent, Strategy strategy) {
+		super(infoAgent, strategy);
 		// TODO Auto-generated constructor stub
 	}
 

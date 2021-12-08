@@ -1,6 +1,8 @@
 package Models.agent;
 
+import Models.Strategy;
 import Models.agent.etat.EtatAgent;
+import Models.agent.etat.EtatInvincible;
 import Models.agent.etat.EtatWithoutEffects;
 import Utils.AgentAction;
 import Utils.InfoAgent;
@@ -11,13 +13,15 @@ public abstract class Agent{
 	private int pRange;
 	private int pInvincibleFor;
 	private int pSkullFor;
+	private Strategy pStrategy;
 	
-	public Agent(InfoAgent infoAgent) {
+	public Agent(InfoAgent infoAgent, Strategy strategy) {
 		this.pInfoAgent = infoAgent;
 		this.pEtat = new EtatWithoutEffects(this);
 		this.pRange = 2;
 		this.pInvincibleFor = 0;
 		this.pSkullFor = 0;
+		this.pStrategy = strategy;
 	}
 	
 	public void setMove(AgentAction action) {		
@@ -66,5 +70,8 @@ public abstract class Agent{
 	}	
 	public void setSkullFor(int nbTurn) {
 		this.pSkullFor = nbTurn;
+	}
+	public Strategy getStrategy() {
+		return this.pStrategy;
 	}
 }
