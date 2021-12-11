@@ -1,7 +1,8 @@
-package Models;
+package Models.Strategy;
 
 import java.util.Random;
 
+import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
 

@@ -1,6 +1,6 @@
 package Models.agent;
 
-import Models.Strategy;
+import Models.Strategy.Strategy;
 import Models.agent.etat.EtatInvincible;
 import Utils.ColorAgent;
 import Utils.InfoAgent;

@@ -15,8 +15,16 @@ public class AgentIterator implements MyIterator{
 
 	@Override
 	public boolean hasNext() {
-        if (position >= this.pListBomberman.size() || this.pListBomberman.get(position) == null || this.pListBomberman.get(position).getLiving() == false) return false;
-        else return true;
+		// on regarde si l'agent existe;
+        if (position >= this.pListBomberman.size() || this.pListBomberman.get(position) == null) return false;
+        // on regarde si l'agent est vivant
+        else if (this.pListBomberman.get(position).getLiving()) return true;
+        else {
+        	// si l'agent n'est pas vivant on regarde l'élement suivant
+        	position = position + 1;
+        	if(position >= this.pListBomberman.size() || this.pListBomberman.get(position) == null) return false;
+        	else return true;
+        }
 	}
 
 	@Override

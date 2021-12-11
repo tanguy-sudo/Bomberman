@@ -1,6 +1,6 @@
 package Models.agent;
 
-import Models.Strategy;
+import Models.Strategy.Strategy;
 import Utils.InfoAgent;
 
 public interface AbstractFactory {

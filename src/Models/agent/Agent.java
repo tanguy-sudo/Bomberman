@@ -1,6 +1,6 @@
 package Models.agent;
 
-import Models.Strategy;
+import Models.Strategy.Strategy;
 import Models.agent.etat.EtatAgent;
 import Models.agent.etat.EtatInvincible;
 import Models.agent.etat.EtatWithoutEffects;

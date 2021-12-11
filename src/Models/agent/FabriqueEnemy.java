@@ -1,8 +1,8 @@
 package Models.agent;
 
-import Models.BirdStrategy;
-import Models.SimpleStrategy;
-import Models.Strategy;
+import Models.Strategy.BasicEnemyStrategy;
+import Models.Strategy.BirdStrategy;
+import Models.Strategy.RaijonStrategy;
 import Utils.InfoAgent;
 
 public class FabriqueEnemy implements AbstractFactory{
@@ -10,12 +10,12 @@ public class FabriqueEnemy implements AbstractFactory{
 	@Override
 	public Agent createAgent(InfoAgent infoAgent) {
 		switch(infoAgent.getType()) {
-		case 'E':
-			return new RajionAgent(infoAgent, new SimpleStrategy());
+		case 'R':
+			return new RajionAgent(infoAgent, new RaijonStrategy());
 		case 'V':
 			return new BirdAgent(infoAgent, new BirdStrategy());
-		case 'R':
-			return new BasicEnemyAgent(infoAgent, new SimpleStrategy());
+		case 'E':
+			return new BasicEnemyAgent(infoAgent, new BasicEnemyStrategy());
 		}
 		return null;
 	}

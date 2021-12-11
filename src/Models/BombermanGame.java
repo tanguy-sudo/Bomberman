@@ -109,18 +109,21 @@ public class BombermanGame extends Game {
 			}
 		}
 		
-		for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {
+		MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ;
+		while( iterator.hasNext()) {		
 			Agent agent = (Agent) iterator.next();
+			updateEtatAgent(agent);
 			if (!agent.getStrategy().isBlockOff(agent, this)) {
 				AgentAction action = null;
 				boolean next = true;
 				while (next) {
 					action = agent.getStrategy().generateAction(agent, this);
 					if (isLegalMove(agent, action)) {
-						EnnemyOrAgentIsHereThenKill(agent, action);
+						EnemyOrAgentIsHereThenKill(agent, action);
 						moveAgent(agent, action);
+						AgentWalksOnItem(agent);
 						next = false;
-					}
+					}		
 
 				}
 				pSupport.firePropertyChange("pGame", null, this);
@@ -146,14 +149,23 @@ public class BombermanGame extends Game {
 
 	@Override
 	public boolean gameContinue() {
-		if(this.pListBombermanAgent.size() == 0) {
+		int countAgent = 0;
+		int countEnemy = 0;
+		for(Agent agent : this.pListBombermanAgent) {
+			if(agent.getLiving()) countAgent = countAgent + 1;
+		}
+		for(Agent agent : this.pListBombermanEnemy) {
+			if(agent.getLiving()) countEnemy = countEnemy + 1;
+		}	
+		if(countAgent == 0 && countEnemy == 0) {
+			System.out.println("equality");
+			return false;
+		}
+		else if(countAgent == 0) {
 			System.out.println("you lose");
 			return false;
-		}else if(this.pListBombermanEnemy.size() == 0) {
+		}else if(countEnemy == 0) {
 			System.out.println("you win");
-			return false;
-		}else if(this.pListBombermanAgent.size() == 0 && this.pListBombermanEnemy.size() == 0) {
-			System.out.println("equality");
 			return false;
 		}
 		return true;
@@ -198,7 +210,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX][coordY + 1])
 					return true;
-				else if(EnnemyHere(coordX, coordY + 1))
+				else if(EnemyHere(coordX, coordY + 1))
 					return false; 
 				else if(!this.pBreakable_walls[coordX][coordY + 1])
 					return true;
@@ -214,7 +226,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX - 1][coordY])
 					return true;
-				else if(EnnemyHere(coordX - 1, coordY))
+				else if(EnemyHere(coordX - 1, coordY))
 					return false; 
 				else if (!this.pBreakable_walls[coordX - 1][coordY])
 					return true;
@@ -230,7 +242,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX + 1][coordY])
 					return true;
-				else if(EnnemyHere(coordX + 1, coordY))
+				else if(EnemyHere(coordX + 1, coordY))
 					return false; 
 				else if (!this.pBreakable_walls[coordX + 1][coordY])
 					return true;
@@ -246,7 +258,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(!this.pBreakable_walls[coordX][coordY - 1] && agent.getAgent().getType() == 'R')
 					return true;
-				else if(EnnemyHere(coordX, coordY - 1))
+				else if(EnemyHere(coordX, coordY - 1))
 					return false; 
 				else if (!this.pBreakable_walls[coordX][coordY - 1])
 					return true;
@@ -271,22 +283,22 @@ public class BombermanGame extends Game {
 		if(agent.getSkullFor() <= 0) this.pListBomb.add(new InfoBomb(coordX, coordY, agent.getRange(), StateBomb.Step0));
 	}
 
-	public void EnnemyOrAgentIsHereThenKill(Agent AgentEnnemy, AgentAction action) {
-		int coordX = AgentEnnemy.getAgent().getX();
-		int coordY = AgentEnnemy.getAgent().getY();
+	public void EnemyOrAgentIsHereThenKill(Agent AgentEnemy, AgentAction action) {
+		int coordX = AgentEnemy.getAgent().getX();
+		int coordY = AgentEnemy.getAgent().getY();
 
 		switch (action) {
 		case MOVE_DOWN:
-			coordY = AgentEnnemy.getAgent().getY() + 1;
+			coordY = AgentEnemy.getAgent().getY() + 1;
 			break;
 		case MOVE_LEFT:
-			coordX = AgentEnnemy.getAgent().getX() - 1;
+			coordX = AgentEnemy.getAgent().getX() - 1;
 			break;
 		case MOVE_RIGHT:
-			coordX = AgentEnnemy.getAgent().getX() + 1;
+			coordX = AgentEnemy.getAgent().getX() + 1;
 			break;
 		case MOVE_UP:
-			coordY = AgentEnnemy.getAgent().getY() - 1;
+			coordY = AgentEnemy.getAgent().getY() - 1;
 			break;
 		default:
 			break;
@@ -296,16 +308,14 @@ public class BombermanGame extends Game {
 			Agent agent = (Agent) iterator.next();
 			if (agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0) {
 				agent.setLiving(false);
-				pSupport.firePropertyChange("pGame", null, this);
 				break;
 			}
 		}
-		if(AgentEnnemy.getAgent().getType() == 'R') {	
+		if(AgentEnemy.getAgent().getType() == 'R') {	
 			for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {
 					Agent agent = (Agent) iterator.next();
-					if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0 && agent != AgentEnnemy) {
+					if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0 && agent != AgentEnemy) {
 						agent.setLiving(false);
-						pSupport.firePropertyChange("pGame", null, this);
 						break;
 					}
 				}		
@@ -354,7 +364,7 @@ public class BombermanGame extends Game {
 	public void generateItem(int coordX, int coordY) {
 		Random r = new Random();
 		switch (r.nextInt(2)) {
-		case 1:
+		case 0:
 			this.pListItems.add(new InfoItem(coordX, coordY, ramdomItem()));
 			break;
 		}
@@ -406,16 +416,17 @@ public class BombermanGame extends Game {
 		agent.setSkullFor(agent.getSkullFor() - 1);
 		if (agent.getInvincibleFor() <= 0 && agent.getSkullFor() <= 0)
 			agent.getEtat().withoutEffects();
+		pSupport.firePropertyChange("pGame", null, this);
 	}
 	
-	public ArrayList<Agent> getListAgentEnnemy(){
+	public ArrayList<Agent> getListAgentEnemy(){
 		return this.pListBombermanEnemy;
 	}
 	public ArrayList<Agent> getListAgentBomberman(){
 		return this.pListBombermanAgent;
 	}
 	
-	public boolean EnnemyHere(int coordX, int coordY) {
+	public boolean EnemyHere(int coordX, int coordY) {
 		for(Agent agent : this.pListBombermanEnemy) {
 			if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
 				return true;

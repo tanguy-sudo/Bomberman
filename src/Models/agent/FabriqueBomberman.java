@@ -1,7 +1,7 @@
 package Models.agent;
 
-import Models.SimpleStrategy;
-import Models.Strategy;
+import Models.Strategy.SimpleStrategy;
+import Models.Strategy.Strategy;
 import Utils.ColorAgent;
 import Utils.InfoAgent;
 
