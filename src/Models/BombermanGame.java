@@ -59,27 +59,25 @@ public class BombermanGame extends Game {
 			InfoBomb bomb = iterator.next();
 			if (bomb.getStateBomb() == StateBomb.Boom) {
 				iterator.remove();
-				pSupport.firePropertyChange("pGame", null, this);
 				break;
 			}
 			bomb.setStateBomb(nextState(bomb.getStateBomb()));
 			pSupport.firePropertyChange("pGame", null, this);
 			if (bomb.getStateBomb() == StateBomb.Boom) {
-				pSupport.firePropertyChange("pGame", null, this);
 				destroyWall(bomb.getX(), bomb.getY(), bomb.getRange());
-				for (Iterator<Agent> it = this.pListBombermanEnemy.iterator(); it.hasNext();) {
-					Agent agent = it.next();
+				for(MyIterator it = new AgentIterator(this.pListBombermanEnemy) ; it.hasNext() ;) {
+					Agent agent = (Agent) it.next();
 					int posXagent = agent.getAgent().getX();
 					int posYagent = agent.getAgent().getY();
 					for (int i = 0; i <= agent.getRange(); i++) {
 						if (posXagent == bomb.getX()) {
 							if ((posYagent == (bomb.getY() + i)) || (posYagent == (bomb.getY() - i))) {
-								it.remove();
+								agent.setLiving(false);
 								pSupport.firePropertyChange("pGame", null, this);
 							}
 						} else if (posYagent == bomb.getY()) {
 							if ((posXagent == (bomb.getX() + i)) || (posXagent == (bomb.getX() - i))) {
-								it.remove();
+								agent.setLiving(false);
 								pSupport.firePropertyChange("pGame", null, this);
 							}
 						}
@@ -87,9 +85,9 @@ public class BombermanGame extends Game {
 				}
 			}
 		}
-
-		for (Iterator<Agent> iterator = this.pListBombermanAgent.iterator(); iterator.hasNext();) {
-			Agent agent = iterator.next();
+		
+		for(MyIterator iterator = new AgentIterator(this.pListBombermanAgent) ; iterator.hasNext() ;) {
+			Agent agent = (Agent) iterator.next();
 			updateEtatAgent(agent);
 			if (agent.getStrategy().isBlockOff(agent, this) && !BombHere(agent.getAgent().getX(), agent.getAgent().getY()))
 				putBomb(agent.getAgent().getX(), agent.getAgent().getY(), agent);
@@ -110,17 +108,17 @@ public class BombermanGame extends Game {
 				pSupport.firePropertyChange("pGame", null, this);
 			}
 		}
-
-		for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();) {
-			Agent agent = iterator.next();
+		
+		for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {
+			Agent agent = (Agent) iterator.next();
 			if (!agent.getStrategy().isBlockOff(agent, this)) {
 				AgentAction action = null;
 				boolean next = true;
 				while (next) {
 					action = agent.getStrategy().generateAction(agent, this);
 					if (isLegalMove(agent, action)) {
+						EnnemyOrAgentIsHereThenKill(agent, action);
 						moveAgent(agent, action);
-						EnnemyOrAgentIsHereThenKill(agent, action, iterator);
 						next = false;
 					}
 
@@ -172,10 +170,10 @@ public class BombermanGame extends Game {
 	public ArrayList<InfoAgent> getListAgent() {
 		ArrayList<InfoAgent> listAgent = new ArrayList<InfoAgent>();
 		for (Agent agent : this.pListBombermanAgent) {
-			listAgent.add(agent.getAgent());
+			if(agent.getLiving()) listAgent.add(agent.getAgent());
 		}
 		for (Agent agent : this.pListBombermanEnemy) {
-			listAgent.add(agent.getAgent());
+			if(agent.getLiving()) listAgent.add(agent.getAgent());
 		}
 		return listAgent;
 	}
@@ -198,7 +196,7 @@ public class BombermanGame extends Game {
 					return true;
 				else if(this.pInputMap.get_walls()[coordX][coordY + 1])
 					return false;
-				else if(agent.getAgent().getType() == 'R')
+				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX][coordY + 1])
 					return true;
 				else if(EnnemyHere(coordX, coordY + 1))
 					return false; 
@@ -214,7 +212,7 @@ public class BombermanGame extends Game {
 					return true;
 				else if(this.pInputMap.get_walls()[coordX - 1][coordY])
 					return false;
-				else if(agent.getAgent().getType() == 'R')
+				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX - 1][coordY])
 					return true;
 				else if(EnnemyHere(coordX - 1, coordY))
 					return false; 
@@ -230,7 +228,7 @@ public class BombermanGame extends Game {
 					return true;
 				else if(this.pInputMap.get_walls()[coordX + 1][coordY])
 					return false;
-				else if(agent.getAgent().getType() == 'R')
+				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX + 1][coordY])
 					return true;
 				else if(EnnemyHere(coordX + 1, coordY))
 					return false; 
@@ -246,7 +244,7 @@ public class BombermanGame extends Game {
 					return true;
 				else if(this.pInputMap.get_walls()[coordX][coordY - 1])
 					return false;
-				else if(agent.getAgent().getType() == 'R')
+				else if(!this.pBreakable_walls[coordX][coordY - 1] && agent.getAgent().getType() == 'R')
 					return true;
 				else if(EnnemyHere(coordX, coordY - 1))
 					return false; 
@@ -273,7 +271,7 @@ public class BombermanGame extends Game {
 		if(agent.getSkullFor() <= 0) this.pListBomb.add(new InfoBomb(coordX, coordY, agent.getRange(), StateBomb.Step0));
 	}
 
-	public void EnnemyOrAgentIsHereThenKill(Agent AgentEnnemy, AgentAction action, Iterator<Agent> itAgent) {
+	public void EnnemyOrAgentIsHereThenKill(Agent AgentEnnemy, AgentAction action) {
 		int coordX = AgentEnnemy.getAgent().getX();
 		int coordY = AgentEnnemy.getAgent().getY();
 
@@ -294,22 +292,24 @@ public class BombermanGame extends Game {
 			break;
 		}
 
-			for (Iterator<Agent> iterator = this.pListBombermanAgent.iterator(); iterator.hasNext();) {
-				Agent agent = iterator.next();
-				if (agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0) {
-					iterator.remove();
-					pSupport.firePropertyChange("pGame", null, this);
-					break;
-				}
+		for(MyIterator iterator = new AgentIterator(this.pListBombermanAgent) ; iterator.hasNext() ;) {
+			Agent agent = (Agent) iterator.next();
+			if (agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0) {
+				agent.setLiving(false);
+				pSupport.firePropertyChange("pGame", null, this);
+				break;
 			}
-				for (Iterator<Agent> iterator = this.pListBombermanEnemy.iterator(); iterator.hasNext();) {
-					Agent agent = iterator.next();
-					if (agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0) {
-						itAgent.remove();
+		}
+		if(AgentEnnemy.getAgent().getType() == 'R') {	
+			for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {
+					Agent agent = (Agent) iterator.next();
+					if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY && agent.getInvincibleFor() <= 0 && agent != AgentEnnemy) {
+						agent.setLiving(false);
 						pSupport.firePropertyChange("pGame", null, this);
 						break;
 					}
-				}	
+				}		
+		}
 	}
 
 	public StateBomb nextState(StateBomb state) {

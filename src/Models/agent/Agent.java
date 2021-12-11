@@ -14,6 +14,7 @@ public abstract class Agent{
 	private int pInvincibleFor;
 	private int pSkullFor;
 	private Strategy pStrategy;
+	private boolean pLiving;
 	
 	public Agent(InfoAgent infoAgent, Strategy strategy) {
 		this.pInfoAgent = infoAgent;
@@ -22,6 +23,7 @@ public abstract class Agent{
 		this.pInvincibleFor = 0;
 		this.pSkullFor = 0;
 		this.pStrategy = strategy;
+		this.pLiving = true;
 	}
 	
 	public void setMove(AgentAction action) {		
@@ -73,5 +75,11 @@ public abstract class Agent{
 	}
 	public Strategy getStrategy() {
 		return this.pStrategy;
+	}
+	public void setLiving(boolean living) {
+		this.pLiving = living;
+	}
+	public boolean getLiving() {
+		return this.pLiving;
 	}
 }
