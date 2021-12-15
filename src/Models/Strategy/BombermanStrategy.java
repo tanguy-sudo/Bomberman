@@ -12,41 +12,25 @@ public class BombermanStrategy extends Strategy{
 	public AgentAction generateAction(Agent agent, BombermanGame game) {
 		Agent enemy = searchEnemy(agent, game);
 		if(enemy != null) {
-			System.out.println("cas 1");
-			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY())) return AgentAction.PUT_BOMB;
-			else return AgentAction.MOVE_UP;
+			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY()) && enemyIsTooClose(agent, game) == null) return AgentAction.PUT_BOMB;
+			else return nextAction(agent, game);
 
 		}
 		else if(searchBreakable_walls(agent, game.getBreakable_walls(), game)) {
-			System.out.println("cas 2");
 			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY())) return AgentAction.PUT_BOMB;
-			else return AgentAction.MOVE_DOWN;
+			else return randomAction();
 		}
-		else {
-			System.out.println("cas 3");
-			Random r = new Random();
-			switch(r.nextInt(4)) {
-				case 0:
-					return AgentAction.MOVE_DOWN;
-				case 1:
-					return AgentAction.MOVE_LEFT;
-				case 2:
-					return AgentAction.MOVE_RIGHT;
-				case 3:
-					return AgentAction.MOVE_UP;
-			}
-		}
-		return AgentAction.STOP;
+		else return randomAction();
 	}
 	
 	private Agent searchEnemy(Agent agent, BombermanGame game) {
-		for(Agent bombermanAgent : game.getListAgentEnemy()) {
-			if(bombermanAgent.getLiving()) {
-				if(bombermanAgent.getAgent().getX() <= agent.getAgent().getX() + 2 
-						&& bombermanAgent.getAgent().getY() >= agent.getAgent().getY() - 2 
-						&& bombermanAgent.getAgent().getX() >= agent.getAgent().getX() - 2
-						&& bombermanAgent.getAgent().getY() <= agent.getAgent().getY() + 2) {
-					return bombermanAgent;
+		for(Agent enemy : game.getListAgentEnemy()) {
+			if(enemy.getLiving()) {
+				if(enemy.getAgent().getX() <= agent.getAgent().getX() + 3 
+						&& enemy.getAgent().getY() >= agent.getAgent().getY() - 3 
+						&& enemy.getAgent().getX() >= agent.getAgent().getX() - 3
+						&& enemy.getAgent().getY() <= agent.getAgent().getY() + 3) {
+					return enemy;
 				}
 			}
 		}
@@ -71,5 +55,69 @@ public class BombermanStrategy extends Strategy{
 		else if(wall[endx][agent.getAgent().getY()]) return true;
 		else return false;
 		
+	}
+	
+	private AgentAction nextAction(Agent agent, BombermanGame game) {
+		enemyIsTooClose(agent, game);
+		for(Agent enemy : game.getListAgentEnemy()) {
+			if(enemy.getLiving()) {
+				if(enemy.getAgent().getX() <= agent.getAgent().getX() + 2 
+						&& enemy.getAgent().getY() >= agent.getAgent().getY() - 2 
+						&& enemy.getAgent().getX() >= agent.getAgent().getX() - 2
+						&& enemy.getAgent().getY() <= agent.getAgent().getY() + 2) {
+					if (enemy.getAgent().getX() < agent.getAgent().getX() && game.isLegalMove(agent, AgentAction.MOVE_RIGHT)) return AgentAction.MOVE_RIGHT;
+					else if (enemy.getAgent().getY() > agent.getAgent().getY() && game.isLegalMove(agent, AgentAction.MOVE_UP)) return AgentAction.MOVE_UP;
+					else if (enemy.getAgent().getX() > agent.getAgent().getX() && game.isLegalMove(agent, AgentAction.MOVE_LEFT)) return AgentAction.MOVE_LEFT;
+					else if (enemy.getAgent().getY() < agent.getAgent().getY() && game.isLegalMove(agent, AgentAction.MOVE_DOWN)) return AgentAction.MOVE_DOWN;
+				}
+			}
+		}
+		for(Agent enemy : game.getListAgentEnemy()) {
+			if(enemy.getLiving()) {
+				if(enemy.getAgent().getX() <= agent.getAgent().getX() + 3 
+						&& enemy.getAgent().getY() >= agent.getAgent().getY() - 3 
+						&& enemy.getAgent().getX() >= agent.getAgent().getX() - 3
+						&& enemy.getAgent().getY() <= agent.getAgent().getY() + 3) {
+					if (enemy.getAgent().getX() < agent.getAgent().getX() && game.isLegalMove(agent, AgentAction.MOVE_RIGHT)) return AgentAction.MOVE_RIGHT;
+					else if (enemy.getAgent().getY() > agent.getAgent().getY() && game.isLegalMove(agent, AgentAction.MOVE_UP)) return AgentAction.MOVE_UP;
+					else if (enemy.getAgent().getX() > agent.getAgent().getX() && game.isLegalMove(agent, AgentAction.MOVE_LEFT)) return AgentAction.MOVE_LEFT;
+					else if (enemy.getAgent().getY() < agent.getAgent().getY() && game.isLegalMove(agent, AgentAction.MOVE_DOWN)) return AgentAction.MOVE_DOWN;
+				}
+			}
+		}
+		
+		return AgentAction.STOP;
+	}
+	
+	private AgentAction enemyIsTooClose(Agent agent, BombermanGame game) {
+		for(Agent enemy : game.getListAgentEnemy()) {
+			if(enemy.getLiving()) {
+				if(enemy.getAgent().getX() <= agent.getAgent().getX() + 1 
+						&& enemy.getAgent().getY() >= agent.getAgent().getY() - 1 
+						&& enemy.getAgent().getX() >= agent.getAgent().getX() - 1
+						&& enemy.getAgent().getY() <= agent.getAgent().getY() + 1) {
+					if (enemy.getAgent().getX() < agent.getAgent().getX() && game.isLegalMove(agent, AgentAction.MOVE_RIGHT)) return AgentAction.MOVE_RIGHT;
+					else if (enemy.getAgent().getY() > agent.getAgent().getY() && game.isLegalMove(agent, AgentAction.MOVE_UP)) return AgentAction.MOVE_UP;
+					else if (enemy.getAgent().getX() > agent.getAgent().getX() && game.isLegalMove(agent, AgentAction.MOVE_LEFT)) return AgentAction.MOVE_LEFT;
+					else if (enemy.getAgent().getY() < agent.getAgent().getY() && game.isLegalMove(agent, AgentAction.MOVE_DOWN)) return AgentAction.MOVE_DOWN;
+				}
+			}
+		}
+		return null;
+	}
+	
+	private AgentAction randomAction() {
+		Random r = new Random();
+		switch(r.nextInt(4)) {
+			case 0:
+				return AgentAction.MOVE_DOWN;
+			case 1:
+				return AgentAction.MOVE_LEFT;
+			case 2:
+				return AgentAction.MOVE_RIGHT;
+			case 3:
+				return AgentAction.MOVE_UP;
+		}
+		return AgentAction.STOP;
 	}
 }

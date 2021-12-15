@@ -7,6 +7,7 @@ import Utils.InfoAgent;
 import View.PanelBomberman;
 import View.ViewBombermanGame;
 import View.ViewCommand;
+import View.ViewStart;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class ControllerBombermanGame extends AbstractController{
 	public ControllerBombermanGame(String layout) {
 	
 		try {
-			this.pMapName = layout;
+			/*this.pMapName = layout;
 			this.pInputMap = new InputMap(layout);
 			this.pPanelBomberman = new PanelBomberman(this.pInputMap.getSizeX(), 
 													  this.pInputMap.getSizeY(), 
@@ -29,10 +30,12 @@ public class ControllerBombermanGame extends AbstractController{
 			
 			ViewCommand viewCommand = new ViewCommand(this);
 			
-			this.pGame = new BombermanGame(500, this.pInputMap);
+			this.pGame = new BombermanGame(10000, this.pInputMap);
 			this.pGame.addPropertyChangeListener(viewCommand);
 			this.pGame.init();
-			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);
+			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);*/
+			
+			ViewStart viewstart = new ViewStart();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

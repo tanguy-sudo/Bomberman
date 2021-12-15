@@ -109,8 +109,7 @@ public class BombermanGame extends Game {
 			}
 		}
 		
-		MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ;
-		while( iterator.hasNext()) {		
+		for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {		
 			Agent agent = (Agent) iterator.next();
 			updateEtatAgent(agent);
 			if (!agent.getStrategy().isBlockOff(agent, this)) {
@@ -210,7 +209,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX][coordY + 1])
 					return true;
-				else if(EnemyHere(coordX, coordY + 1))
+				else if(EnemyOrAllyHere(coordX, coordY + 1))
 					return false; 
 				else if(!this.pBreakable_walls[coordX][coordY + 1])
 					return true;
@@ -226,7 +225,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX - 1][coordY])
 					return true;
-				else if(EnemyHere(coordX - 1, coordY))
+				else if(EnemyOrAllyHere(coordX - 1, coordY))
 					return false; 
 				else if (!this.pBreakable_walls[coordX - 1][coordY])
 					return true;
@@ -242,7 +241,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(agent.getAgent().getType() == 'R' && !this.pBreakable_walls[coordX + 1][coordY])
 					return true;
-				else if(EnemyHere(coordX + 1, coordY))
+				else if(EnemyOrAllyHere(coordX + 1, coordY))
 					return false; 
 				else if (!this.pBreakable_walls[coordX + 1][coordY])
 					return true;
@@ -258,7 +257,7 @@ public class BombermanGame extends Game {
 					return false;
 				else if(!this.pBreakable_walls[coordX][coordY - 1] && agent.getAgent().getType() == 'R')
 					return true;
-				else if(EnemyHere(coordX, coordY - 1))
+				else if(EnemyOrAllyHere(coordX, coordY - 1))
 					return false; 
 				else if (!this.pBreakable_walls[coordX][coordY - 1])
 					return true;
@@ -426,14 +425,21 @@ public class BombermanGame extends Game {
 		return this.pListBombermanAgent;
 	}
 	
-	public boolean EnemyHere(int coordX, int coordY) {
-		for(Agent agent : this.pListBombermanEnemy) {
+	public boolean EnemyOrAllyHere(int coordX, int coordY) {
+		/*for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {
+			Agent agent = (Agent) iterator.next();
 			if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
+				return true;
+			}
+		}*/
+		
+		for(InfoAgent agent : getListAgent()) {
+			if(agent.getX() == coordX && agent.getY() == coordY) {
 				return true;
 			}
 		}
 		return false;
-	}
+	}	
 	
 	public boolean BombHere(int coordX, int coordY) {
 		for(InfoBomb bomb : this.pListBomb) {

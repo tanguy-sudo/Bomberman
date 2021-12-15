@@ -25,5 +25,6 @@ public class ViewSimpleGame {
 		window.setLocationRelativeTo(null);
 		// affiche l'interface
 		window.setVisible(true);
+
 	}
 }
