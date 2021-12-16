@@ -15,12 +15,21 @@ public class ControllerBombermanGame extends AbstractController{
 	private PanelBomberman pPanelBomberman;
 	private ViewBombermanGame pViewBombermanGame;
 	private InputMap pInputMap;
+	private ViewStart viewstart;
 	
-	public ControllerBombermanGame(String layout) {
+	public ControllerBombermanGame() {
+		this.pMapName = "";
+		this.pInputMap = null;
+		this.pPanelBomberman = null;
+		this.pViewBombermanGame = null;
+		this.pGame = null;
+		this.viewstart = new ViewStart(this);
+	}	
 	
+	public void lunchGame(String pathLayout) {
 		try {
-			/*this.pMapName = layout;
-			this.pInputMap = new InputMap(layout);
+			this.pMapName = pathLayout;
+			this.pInputMap = new InputMap(pathLayout);
 			this.pPanelBomberman = new PanelBomberman(this.pInputMap.getSizeX(), 
 													  this.pInputMap.getSizeY(), 
 													  this.pInputMap.get_walls(), 
@@ -33,13 +42,10 @@ public class ControllerBombermanGame extends AbstractController{
 			this.pGame = new BombermanGame(10000, this.pInputMap);
 			this.pGame.addPropertyChangeListener(viewCommand);
 			this.pGame.init();
-			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);*/
-			
-			ViewStart viewstart = new ViewStart();
-			
+			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 }

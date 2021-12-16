@@ -5,16 +5,25 @@ import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import Controller.AbstractController;
+import Controller.ControllerBombermanGame;
 
 public class ViewStart {
-	public ViewStart() {
+	public JFrame window;
+	public ViewStart(ControllerBombermanGame controller) {
 	
 		JFrame window = new JFrame("Bomberman");
 		JPanel globalpanel = new JPanel();
@@ -23,38 +32,45 @@ public class ViewStart {
 		JPanel levelJPanel = new JPanel();
 		JPanel playJPanel = new JPanel();
 		
-		GridLayout globalGridlayout = new GridLayout(2, 1);
-		GridLayout choiceGridLayout = new GridLayout(1, 2);
-		GridLayout mapGridLayout = new GridLayout(2, 1);
-		GridLayout levelGridLayout = new GridLayout(2, 1);
-		GridLayout playGridLayout = new GridLayout(1, 1);	
+		GridLayout globalGridlayout = new GridLayout(5, 1);
 		
-		String s1[] = { "alone", "arene", "exemple", "jeu_symetrique", "jeu1", "niveau1", "niveau2", "niveau3", "test" }; 
-		String s2[] = { "niveau 1", "niveau 2" };		
-		JComboBox listMap = new JComboBox(s1);
+		String s1[] = { "niveau 1", "niveau 2" };	
+		JButton buttonfileChooser = new JButton("Cliquer pour choisir");
 		JLabel listMapLabel = new JLabel("Choisissez une map", SwingConstants.CENTER); 
-		JComboBox listLevel = new JComboBox(s2);
+		JComboBox<String> listLevel = new JComboBox<String>(s1);
 		JLabel listLevelLabel = new JLabel("Choisissez un niveau", SwingConstants.CENTER); 
 		JButton button = new JButton("Valider");
 			
 		globalpanel.setLayout(globalGridlayout);
-		choiceJPanel.setLayout(choiceGridLayout);
-		mapJPanel.setLayout(mapGridLayout);
-		levelJPanel.setLayout(levelGridLayout);
-		playJPanel.setLayout(playGridLayout);
-		
-		playJPanel.add(button);
-		levelJPanel.add(listLevelLabel);
-		levelJPanel.add(listLevel);
-		mapJPanel.add(listMapLabel);
-		mapJPanel.add(listMap);
-		choiceJPanel.add(mapJPanel);
-		choiceJPanel.add(levelJPanel);
-		globalpanel.add(choiceJPanel);
-		globalpanel.add(playJPanel);
+
+		globalpanel.add(listLevelLabel);
+		globalpanel.add(listLevel);
+		globalpanel.add(listMapLabel);
+		globalpanel.add(buttonfileChooser);
+		globalpanel.add(button);
 		window.add(globalpanel);
 		
-		window.setSize(new Dimension(500, 500));
+		buttonfileChooser.addActionListener(new ActionListener() {		
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileChooser = new JFileChooser("./layouts/");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("*.lay", "lay");
+				fileChooser.setFileFilter(filter);
+				int returnValue = fileChooser.showSaveDialog(null);
+				if(returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					String extension = selectedFile.getAbsolutePath().split("\\.")[1];
+					if(extension == "lay") {
+						controller.lunchGame(selectedFile.getAbsolutePath());
+						window.setVisible(false);
+					}else {
+						System.out.print(extension);
+					}
+				}
+			}
+		});
+		
+		window.setSize(new Dimension(200, 200));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}

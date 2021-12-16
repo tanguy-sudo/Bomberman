@@ -4,6 +4,7 @@ import Controller.*;
 import Controller.States.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -76,7 +77,10 @@ public class ViewCommand implements PropertyChangeListener, WindowListener {
 		this.slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
 		
 		window.setSize(new Dimension(800, 400));
-		window.setLocationRelativeTo(null);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int sizeW = (int) screenSize.getWidth() - 800;
+		int sizeH = (int) screenSize.getHeight() - 400;
+		window.setLocation(sizeW, sizeH);
 		
 		globalpanel.setLayout(globalGridlayout);
 		highpanel.setLayout(buttonsGridLayout);

@@ -25,7 +25,7 @@ public class ViewBombermanGame  implements PropertyChangeListener, WindowListene
 		window = new JFrame("Game");
 		window.add(this.pPanelBomberman);
 		window.setSize(this.pPanelBomberman.getSizeX() * 50, this.pPanelBomberman.getSizeY() * 50);
-		window.setLocationRelativeTo(null);
+		window.setLocation(0, 0);
 		// affiche l'interface
 		window.setVisible(true);
 		window.addWindowListener(this);
