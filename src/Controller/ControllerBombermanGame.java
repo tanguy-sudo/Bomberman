@@ -15,7 +15,6 @@ public class ControllerBombermanGame extends AbstractController{
 	private PanelBomberman pPanelBomberman;
 	private ViewBombermanGame pViewBombermanGame;
 	private InputMap pInputMap;
-	private ViewStart viewstart;
 	
 	public ControllerBombermanGame() {
 		this.pMapName = "";
@@ -23,10 +22,10 @@ public class ControllerBombermanGame extends AbstractController{
 		this.pPanelBomberman = null;
 		this.pViewBombermanGame = null;
 		this.pGame = null;
-		this.viewstart = new ViewStart(this);
+		ViewStart viewstart = new ViewStart(this);
 	}	
 	
-	public void lunchGame(String pathLayout) {
+	public void lunchGame(String pathLayout, String niveau, String fileName) {
 		try {
 			this.pMapName = pathLayout;
 			this.pInputMap = new InputMap(pathLayout);
@@ -37,9 +36,9 @@ public class ControllerBombermanGame extends AbstractController{
 													  this.pInputMap.getStart_agents());
 			this.pViewBombermanGame = new ViewBombermanGame(this.pPanelBomberman);
 			
-			ViewCommand viewCommand = new ViewCommand(this);
+			ViewCommand viewCommand = new ViewCommand(this, fileName, niveau);
 			
-			this.pGame = new BombermanGame(10000, this.pInputMap);
+			this.pGame = new BombermanGame(10000, this.pInputMap, Integer.parseInt(niveau));
 			this.pGame.addPropertyChangeListener(viewCommand);
 			this.pGame.init();
 			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);		

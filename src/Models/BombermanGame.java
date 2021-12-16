@@ -21,8 +21,9 @@ public class BombermanGame extends Game {
 	private ArrayList<Agent> pListBombermanEnemy;
 	private ArrayList<InfoBomb> pListBomb;
 	private ArrayList<InfoItem> pListItems;
+	private int pNiveau;
 
-	public BombermanGame(int maxturn, InputMap inputMap) {
+	public BombermanGame(int maxturn, InputMap inputMap, int niveau) {
 		super(maxturn);
 		this.pInputMap = inputMap;
 		this.pBreakable_walls = inputMap.getStart_breakable_walls();
@@ -30,6 +31,7 @@ public class BombermanGame extends Game {
 		this.pListBombermanEnemy = new ArrayList<Agent>();
 		this.pListBomb = new ArrayList<InfoBomb>();
 		this.pListItems = new ArrayList<InfoItem>();
+		this.pNiveau = niveau;
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class BombermanGame extends Game {
 		for(MyIterator iterator = new AgentIterator(this.pListBombermanAgent) ; iterator.hasNext() ;) {
 			Agent agent = (Agent) iterator.next();
 			updateEtatAgent(agent);
-			if (agent.getStrategy().isBlockOff(agent, this) && !BombHere(agent.getAgent().getX(), agent.getAgent().getY()))
+			if (agent.getStrategy().isBlockOff(agent, this) && agent.getSkullFor() <= 0 && !BombHere(agent.getAgent().getX(), agent.getAgent().getY()))
 				putBomb(agent.getAgent().getX(), agent.getAgent().getY(), agent);
 			else {
 				AgentAction action = null;
@@ -138,9 +140,9 @@ public class BombermanGame extends Game {
 
 		for (InfoAgent infoAgent : this.pInputMap.getStart_agents()) {
 			if (infoAgent.getType() == 'B') {
-				this.pListBombermanAgent.add(fabriqueBomberman.createAgent(infoAgent));
+				this.pListBombermanAgent.add(fabriqueBomberman.createAgent(infoAgent, this.pNiveau));
 			} else {
-				this.pListBombermanEnemy.add(fabriqueEnemy.createAgent(infoAgent));
+				this.pListBombermanEnemy.add(fabriqueEnemy.createAgent(infoAgent, this.pNiveau));
 			}
 		}
 		pSupport.firePropertyChange("pGame", null, this);
@@ -391,11 +393,10 @@ public class BombermanGame extends Game {
 			if (item.getX() == agent.getAgent().getX() && item.getY() == agent.getAgent().getY()) {
 				switch (item.getType()) {
 				case FIRE_UP:
-					agent.setRange(agent.getRange() + 1);
+					if (agent.getRange() < 5) agent.setRange(agent.getRange() + 1);
 					break;
 				case FIRE_DOWN:
-					if (agent.getRange() > 1)
-						agent.setRange(agent.getRange() - 1);
+					if (agent.getRange() > 1) agent.setRange(agent.getRange() - 1);
 					break;
 				case FIRE_SUIT:
 					agent.getEtat().invincible();
@@ -426,13 +427,6 @@ public class BombermanGame extends Game {
 	}
 	
 	public boolean EnemyOrAllyHere(int coordX, int coordY) {
-		/*for(MyIterator iterator = new AgentIterator(this.pListBombermanEnemy) ; iterator.hasNext() ;) {
-			Agent agent = (Agent) iterator.next();
-			if(agent.getAgent().getX() == coordX && agent.getAgent().getY() == coordY) {
-				return true;
-			}
-		}*/
-		
 		for(InfoAgent agent : getListAgent()) {
 			if(agent.getX() == coordX && agent.getY() == coordY) {
 				return true;

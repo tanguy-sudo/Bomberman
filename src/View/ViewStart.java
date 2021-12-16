@@ -1,12 +1,11 @@
 package View;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -18,11 +17,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import Controller.AbstractController;
 import Controller.ControllerBombermanGame;
 
 public class ViewStart {
 	public JFrame window;
+	public JLabel listMapLabel;
+	public String filePath;
+	public JComboBox<String> listLevel;
+	public String fileName;
+	
 	public ViewStart(ControllerBombermanGame controller) {
 	
 		JFrame window = new JFrame("Bomberman");
@@ -34,12 +37,12 @@ public class ViewStart {
 		
 		GridLayout globalGridlayout = new GridLayout(5, 1);
 		
-		String s1[] = { "niveau 1", "niveau 2" };	
-		JButton buttonfileChooser = new JButton("Cliquer pour choisir");
-		JLabel listMapLabel = new JLabel("Choisissez une map", SwingConstants.CENTER); 
-		JComboBox<String> listLevel = new JComboBox<String>(s1);
-		JLabel listLevelLabel = new JLabel("Choisissez un niveau", SwingConstants.CENTER); 
-		JButton button = new JButton("Valider");
+		String s1[] = { "level 1", "level 2" };	
+		JButton buttonfileChooser = new JButton("Click to choose a map");
+		listMapLabel = new JLabel("File : any", SwingConstants.CENTER); 
+		listLevel = new JComboBox<String>(s1);
+		JLabel listLevelLabel = new JLabel("Choose a level", SwingConstants.CENTER); 
+		JButton button = new JButton("validate");
 			
 		globalpanel.setLayout(globalGridlayout);
 
@@ -49,6 +52,9 @@ public class ViewStart {
 		globalpanel.add(buttonfileChooser);
 		globalpanel.add(button);
 		window.add(globalpanel);
+		window.setResizable(false);
+		button.setEnabled(false);
+		((JLabel)listLevel.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		
 		buttonfileChooser.addActionListener(new ActionListener() {		
 			@Override
@@ -59,19 +65,32 @@ public class ViewStart {
 				int returnValue = fileChooser.showSaveDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
-					String extension = selectedFile.getAbsolutePath().split("\\.")[1];
-					if(extension == "lay") {
-						controller.lunchGame(selectedFile.getAbsolutePath());
-						window.setVisible(false);
+					String tabFile[] = selectedFile.getAbsolutePath().split("\\\\");
+					fileName = tabFile[tabFile.length-1];
+					String extension = fileName.split("\\.")[1];
+					if(extension.contains("lay")) {
+						filePath = selectedFile.getAbsolutePath();
+						listMapLabel.setText("File : " + fileName);
+						button.setEnabled(true);
 					}else {
-						System.out.print(extension);
+						listMapLabel.setText("File : any");
+						button.setEnabled(false);
 					}
 				}
 			}
 		});
+			
+		button.addActionListener(new ActionListener() {		
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controller.lunchGame(filePath, listLevel.getSelectedItem().toString().split(" ")[1], fileName);
+				window.setVisible(false);
+			}
+		});
 		
-		window.setSize(new Dimension(200, 200));
+		window.setSize(new Dimension(250, 200));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

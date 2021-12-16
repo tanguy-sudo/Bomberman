@@ -8,6 +8,7 @@ public abstract class AbstractController {
 	public void restart() {
 		this.pGame.restart(pMapName);
 		this.pGame.init();
+		this.pause();
 	}
 	
 	// passage manuel d’une étape

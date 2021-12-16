@@ -29,6 +29,7 @@ public class ViewBombermanGame  implements PropertyChangeListener, WindowListene
 		// affiche l'interface
 		window.setVisible(true);
 		window.addWindowListener(this);
+		window.setResizable(false);
 
 	}
 

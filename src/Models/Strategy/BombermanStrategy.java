@@ -12,12 +12,12 @@ public class BombermanStrategy extends Strategy{
 	public AgentAction generateAction(Agent agent, BombermanGame game) {
 		Agent enemy = searchEnemy(agent, game);
 		if(enemy != null) {
-			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY()) && enemyIsTooClose(agent, game) == null) return AgentAction.PUT_BOMB;
+			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY()) && enemyIsTooClose(agent, game) == null && agent.getSkullFor() <= 0) return AgentAction.PUT_BOMB;
 			else return nextAction(agent, game);
 
 		}
 		else if(searchBreakable_walls(agent, game.getBreakable_walls(), game)) {
-			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY())) return AgentAction.PUT_BOMB;
+			if(!game.BombHere(agent.getAgent().getX(), agent.getAgent().getY()) && agent.getSkullFor() <= 0) return AgentAction.PUT_BOMB;
 			else return randomAction();
 		}
 		else return randomAction();

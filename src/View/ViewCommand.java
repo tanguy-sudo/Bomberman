@@ -36,12 +36,12 @@ public class ViewCommand implements PropertyChangeListener, WindowListener {
 	private JFrame window;
 	
 
-	public ViewCommand(AbstractController abstractController) {
+	public ViewCommand(AbstractController abstractController, String fileName, String niveau) {
 		
 		this.pAbstractController = abstractController;
 		
 		// création de l'interface graphique
-		window = new JFrame("Command");
+		window = new JFrame("Command (map : " + fileName + ", level : " + niveau +")");
 		window.addWindowListener(this);
 		
 		JPanel globalpanel = new JPanel();
@@ -109,6 +109,7 @@ public class ViewCommand implements PropertyChangeListener, WindowListener {
 		window.add(globalpanel);
 		// Affiche l'interface
 		window.setVisible(true);
+		window.setResizable(false);
 		
 		this.etat = new EtatRestart(this);
 		
