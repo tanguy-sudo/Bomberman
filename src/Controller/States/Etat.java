@@ -1,4 +1,9 @@
 package Controller.States;
+/**
+ * 
+ * @author tanguy
+ * Interface des différents états de la vue command
+ */
 public interface Etat {
 	public void restart();
 	public void play();

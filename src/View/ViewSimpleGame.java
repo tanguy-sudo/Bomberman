@@ -4,11 +4,15 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+/**
+ * Vue pour tester l'interface graphique
+ * @author tanguy
+ *
+ */
 public class ViewSimpleGame {
 	public ViewSimpleGame() {
 		
-		// crÃ©ation de l'interface graphique
+		// création de l'interface graphique
 		JFrame window = new JFrame("Game");
 		
 		JPanel Globalpanel = new JPanel();

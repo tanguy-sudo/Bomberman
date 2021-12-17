@@ -1,18 +1,28 @@
 package Models;
 
 import java.util.ArrayList;
-
 import Models.agent.Agent;
-
+/**
+ * 
+ * @author tanguy
+ * Classe qui créé un itérator sur une liste d'agents
+ */
 public class AgentIterator implements MyIterator{
 	private ArrayList<Agent> pListBomberman;
 	private int position;
 	
+	/**
+	 * Initialise une liste d'agents
+	 * @param listBomberman : Liste d'agents
+	 */
 	public AgentIterator(ArrayList<Agent> listBomberman) {
 		this.pListBomberman = listBomberman;
 		this.position = 0;
 	}
 
+	/**
+	 * Retourne vrai si le prochain agent est vivant
+	 */
 	@Override
 	public boolean hasNext() {
 		// on regarde si l'agent existe;
@@ -30,6 +40,9 @@ public class AgentIterator implements MyIterator{
 		return false;
 	}
 
+	/**
+	 * Retourne le prochain agent
+	 */
 	@Override
 	public Object next() {
 		Agent agent = this.pListBomberman.get(position);

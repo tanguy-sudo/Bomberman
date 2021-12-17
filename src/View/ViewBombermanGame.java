@@ -1,18 +1,27 @@
 package View;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import javax.swing.JFrame;
-import Models.BombermanGame;
-import Models.agent.Agent;
 
+import Controller.ControllerBombermanGame;
+import Models.BombermanGame;
+import Utils.AgentAction;
+/**
+ * Vue de la partie
+ * @author tanguy
+ *
+ */
 public class ViewBombermanGame  implements PropertyChangeListener {
 	private PanelBomberman pPanelBomberman;
 	private JFrame window;
+	ControllerBombermanGame controller;
 	
-	public ViewBombermanGame(PanelBomberman panelBomberman) {
+	public ViewBombermanGame(PanelBomberman panelBomberman, ControllerBombermanGame controller) {
 		this.pPanelBomberman = panelBomberman;
+		this.controller = controller;
 		window = new JFrame("Game");
 		window.add(this.pPanelBomberman);
 		window.setSize(this.pPanelBomberman.getSizeX() * 50, this.pPanelBomberman.getSizeY() * 50);
@@ -21,6 +30,10 @@ public class ViewBombermanGame  implements PropertyChangeListener {
 		window.setVisible(true);
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		window.setFocusable(true);
+		initKeyListener();
+	
 
 	}
 
@@ -32,4 +45,65 @@ public class ViewBombermanGame  implements PropertyChangeListener {
 			this.pPanelBomberman.repaint();
 		}
 	}
+	
+	/**
+	 * Événements clavier
+	 */
+    public void initKeyListener() {
+        this.window.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                int key = keyEvent.getKeyCode();
+                    switch (key) {
+                		// gauche
+                        case KeyEvent.VK_Q:
+                        	controller.updateActionBomberman(AgentAction.MOVE_LEFT);
+                        	break;
+                        case KeyEvent.VK_LEFT:
+                        	controller.updateActionBomberman(AgentAction.MOVE_LEFT);
+                        	break;
+                        // droite
+                        case KeyEvent.VK_D:
+                        	controller.updateActionBomberman(AgentAction.MOVE_RIGHT);
+                        	break;
+                        case KeyEvent.VK_RIGHT:
+                        	controller.updateActionBomberman(AgentAction.MOVE_RIGHT);
+                        	break;
+                        // haut
+                        case KeyEvent.VK_Z:
+                        	controller.updateActionBomberman(AgentAction.MOVE_UP);
+                        	break;
+                        case KeyEvent.VK_UP:
+                        	controller.updateActionBomberman(AgentAction.MOVE_UP);
+                        	break;
+                    	// bas
+                        case KeyEvent.VK_S:
+                        	controller.updateActionBomberman(AgentAction.MOVE_DOWN);
+                        	break;
+                        case KeyEvent.VK_DOWN:
+                        	controller.updateActionBomberman(AgentAction.MOVE_DOWN);
+                        	break;
+                        // pose une bombe
+                        case KeyEvent.VK_SPACE: 
+                        	controller.updateActionBomberman(AgentAction.PUT_BOMB);
+                        	break;
+                        default:
+                        	controller.updateActionBomberman(AgentAction.STOP);
+                            break;
+                    }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                int key = keyEvent.getKeyCode();
+                if (key != KeyEvent.VK_SPACE) {
+                	controller.updateActionBomberman(AgentAction.STOP);
+                }
+            }
+
+        });
+    }
 }

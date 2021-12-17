@@ -2,12 +2,16 @@ package Models.agent;
 
 import Models.Strategy.Strategy;
 import Models.agent.etat.EtatAgent;
-import Models.agent.etat.EtatInvincible;
 import Models.agent.etat.EtatWithoutEffects;
 import Utils.AgentAction;
 import Utils.InfoAgent;
-
+/**
+ * Classe qui représente un agent
+ * @author tanguy
+ *
+ */
 public abstract class Agent{
+	
 	protected InfoAgent pInfoAgent;
 	private EtatAgent pEtat;
 	private int pRange;
@@ -16,6 +20,11 @@ public abstract class Agent{
 	private Strategy pStrategy;
 	private boolean pLiving;
 	
+	/**
+	 * Créer un agent
+	 * @param infoAgent : Informations sur l'agent
+	 * @param strategy: Stratégie sur l'agent
+	 */
 	public Agent(InfoAgent infoAgent, Strategy strategy) {
 		this.pInfoAgent = infoAgent;
 		this.pEtat = new EtatWithoutEffects(this);
@@ -26,6 +35,10 @@ public abstract class Agent{
 		this.pLiving = true;
 	}
 	
+	/**
+	 * Bouge un agent
+	 * @param action : Action que l'agent fait
+	 */
 	public void setMove(AgentAction action) {		
 		switch (action) {
 		case MOVE_DOWN:
@@ -45,40 +58,87 @@ public abstract class Agent{
 		this.pInfoAgent.setAgentAction(action);
 	}
 	
+	/**
+	 * 
+	 * @return L'attribut pInfoAgent
+	 */
 	public InfoAgent getAgent() {
 		return this.pInfoAgent;
-	}
-	
+	}	
+	/**
+	 * Mets à jour l'attribut etat
+	 * @param etat : état de l'agent
+	 */
 	public void setEtat(EtatAgent etat) {
 		this.pEtat = etat;
 	}
+	/**
+	 * 
+	 * @return L'attribut pEtat
+	 */
 	public EtatAgent getEtat() {
 		return this.pEtat;
 	}
+	/**
+	 * Mets à jour l'attribut pRange
+	 * @param range
+	 */
 	public void setRange(int range) {
 		this.pRange = range;
 	}
+	/**
+	 * 
+	 * @return L'attribut pRange
+	 */
 	public int getRange() {
 		return this.pRange;
 	}
+	/**
+	 * 
+	 * @return  L'attribut pInvincibleFor
+	 */
 	public int getInvincibleFor() {
 		return this.pInvincibleFor;
 	}	
+	/**
+	 *  Mets à jour l'attribut pInvincibleFor
+	 * @param nbTurn
+	 */
 	public void setInvincibleFor(int nbTurn) {
 		this.pInvincibleFor = nbTurn;
 	}
+	/**
+	 *  L'attribut pSkullFor
+	 * @return
+	 */
 	public int getSkullFor() {
 		return this.pSkullFor;
 	}	
+	/**
+	 * Mets à jour l'attribut pSkullFor
+	 * @param nbTurn
+	 */
 	public void setSkullFor(int nbTurn) {
 		this.pSkullFor = nbTurn;
 	}
+	/**
+	 * 
+	 * @return L'attribut pStrategy
+	 */
 	public Strategy getStrategy() {
 		return this.pStrategy;
 	}
+	/**
+	 * Mets à jour l'attribut pLiving
+	 * @param living
+	 */
 	public void setLiving(boolean living) {
 		this.pLiving = living;
 	}
+	/**
+	 *  
+	 * @return L'attribut pSkullFor
+	 */
 	public boolean getLiving() {
 		return this.pLiving;
 	}

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /** 
  * Classe qui permet de charger une carte de Bomberman à partir d'un fichier de layout d'extension .lay
- * 
+ *  @author tanguy
  * 
  */
 

@@ -1,7 +1,11 @@
 package Models.agent.etat;
 
 import Models.agent.Agent;
-
+/**
+ * Classe indiquant l'état invincible
+ * @author tanguy
+ *
+ */
 public class EtatInvincible implements EtatAgent{
 	
 	private Agent pAgent;

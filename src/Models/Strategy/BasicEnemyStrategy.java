@@ -1,11 +1,12 @@
 package Models.Strategy;
-
-import java.util.Random;
-
 import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
-
+/**
+ * le BasicEnemy fonce vers la cible en permanence
+ * @author tanguy
+ *
+ */
 public class BasicEnemyStrategy extends Strategy{
 
 	@Override

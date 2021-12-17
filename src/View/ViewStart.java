@@ -4,11 +4,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
-
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,28 +14,33 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import Controller.ControllerBombermanGame;
-
+/**
+ * Vue de début de partie
+ * @author tanguy
+ *
+ */
 public class ViewStart {
 	public JFrame window;
 	public JLabel listMapLabel;
 	public String filePath;
 	public JComboBox<String> listLevel;
 	public String fileName;
+	public JCheckBox manualCheckBox;
 	
 	public ViewStart(ControllerBombermanGame controller) {
 	
 		JFrame window = new JFrame("Bomberman");
 		JPanel globalpanel = new JPanel();
 		
-		GridLayout globalGridlayout = new GridLayout(5, 1);
+		GridLayout globalGridlayout = new GridLayout(6, 1);
 		
 		String s1[] = { "level 1", "level 2" };	
 		JButton buttonfileChooser = new JButton("Click to choose a map");
 		listMapLabel = new JLabel("File : any", SwingConstants.CENTER); 
 		listLevel = new JComboBox<String>(s1);
 		JLabel listLevelLabel = new JLabel("Choose a level", SwingConstants.CENTER); 
+	    this.manualCheckBox = new JCheckBox("the manual mode"); 
 		JButton button = new JButton("validate");
 			
 		globalpanel.setLayout(globalGridlayout);
@@ -46,11 +49,13 @@ public class ViewStart {
 		globalpanel.add(listLevel);
 		globalpanel.add(listMapLabel);
 		globalpanel.add(buttonfileChooser);
+		globalpanel.add(manualCheckBox);
 		globalpanel.add(button);
 		window.add(globalpanel);
 		window.setResizable(false);
 		button.setEnabled(false);
 		((JLabel)listLevel.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		manualCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		buttonfileChooser.addActionListener(new ActionListener() {		
 			@Override
@@ -79,12 +84,12 @@ public class ViewStart {
 		button.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.lunchGame(filePath, listLevel.getSelectedItem().toString().split(" ")[1], fileName);
+				controller.lunchGame(filePath, listLevel.getSelectedItem().toString().split(" ")[1], fileName, manualCheckBox.isSelected());
 				window.setVisible(false);
 			}
 		});
 		
-		window.setSize(new Dimension(250, 200));
+		window.setSize(new Dimension(250, 220));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

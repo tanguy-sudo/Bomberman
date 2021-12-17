@@ -1,8 +1,14 @@
 package Controller;
-import View.*;
-import Models.*;
+/**
+ * 
+ * @author tanguy
+ * Premier contrôleur crée pour faire des tests
+ */
 public class ControllerSimpleGame extends AbstractController{
-	public ControllerSimpleGame(String layout) {
-		
+	/**
+	 * Contrôleur de la classe ControllerSimpleGame
+	 * @param layout : Nom du fichier de la map
+	 */
+	public ControllerSimpleGame(String layout) {		
 	}
 }

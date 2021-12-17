@@ -1,9 +1,18 @@
 package Controller.States;
 import View.*;
+/**
+ * 
+ * @author tanguy
+ * Classe indiquant l'état wait
+ */
 public class EtatWait implements Etat{
 	
 	private ViewCommand pViewCommand;
 	
+	/**
+	 * Rends les boutons start et next intéragissable et les boutons restart et wait enable
+	 * @param viewCommand : Vue command
+	 */
 	public EtatWait(ViewCommand viewCommand) {
 		this.pViewCommand = viewCommand;
 		

@@ -1,7 +1,11 @@
 package Models.agent.etat;
 
 import Models.agent.Agent;
-
+/**
+ * Classe indiquant l'état sans effet
+ * @author tanguy
+ *
+ */
 public class EtatWithoutEffects implements EtatAgent{
 	
 	private Agent pAgent;

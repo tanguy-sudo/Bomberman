@@ -1,10 +1,13 @@
 package Models.Strategy;
 
-import java.util.Random;
-
 import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
+/**
+ * Interface des stratégies
+ * @author tanguy
+ *
+ */
 
 public abstract class Strategy {
 

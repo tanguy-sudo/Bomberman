@@ -5,11 +5,15 @@ import Models.Strategy.BirdStrategy;
 import Models.Strategy.RaijonStrategy;
 import Models.Strategy.SimpleStrategy;
 import Utils.InfoAgent;
-
+/**
+ * Fabrique un ennemi et applique une stratégie en fonction du niveau
+ * @author tanguy
+ *
+ */
 public class FabriqueEnemy implements AbstractFactory{
 
 	@Override
-	public Agent createAgent(InfoAgent infoAgent, int niveau) {
+	public Agent createAgent(InfoAgent infoAgent, int niveau, boolean manual) {
 		if(niveau == 1) {
 			switch(infoAgent.getType()) {
 				case 'R':
@@ -29,7 +33,7 @@ public class FabriqueEnemy implements AbstractFactory{
 					return new BasicEnemyAgent(infoAgent, new BasicEnemyStrategy());
 			}
 		}
-		// on tombe jamais dans se cas
+		// on tombe jamais dans ce cas
 		return null;
 	}
 }

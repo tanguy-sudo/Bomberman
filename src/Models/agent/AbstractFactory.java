@@ -1,8 +1,10 @@
 package Models.agent;
-
-import Models.Strategy.Strategy;
 import Utils.InfoAgent;
-
+/**
+ * Fabrique abstraite
+ * @author tanguy
+ *
+ */
 public interface AbstractFactory {
-	public Agent createAgent(InfoAgent infoAgent, int niveau);
+	public Agent createAgent(InfoAgent infoAgent, int niveau, boolean manual);
 }

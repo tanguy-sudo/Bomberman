@@ -1,32 +1,49 @@
 package Controller;
 import Models.*;
+/**
+ * 
+ * @author tanguy
+ * Classe qui définit les fonctions principales d'un contrôleur
+ */
 public abstract class AbstractController {
+	
 	protected Game pGame;
 	protected String pMapName;
 	
-	// arrÃªt et rÃ©initialisation
+	/**
+	 *  Arrêt et réinitialisation de la partie
+	 */
 	public void restart() {
 		this.pGame.restart(pMapName);
 		this.pGame.init();
 		this.pause();
 	}
 	
-	// passage manuel dâ€™une Ã©tape
+	/**
+	 *  Passage manuel d'une étape
+	 */
 	public void step(){
 		this.pGame.step();
 	}
 	
-	// passage automatique des Ã©tapes
+	/**
+	 *  Passage automatique des étapes
+	 */
 	public void play() {
 		this.pGame.launch();
 	}
 	
-	// interruption du passage automatique des Ã©tapes
+	/*
+	 *  Interruption du passage automatique des étapes
+	 */
 	public void pause() {
 		this.pGame.pause();
 	}
 	
-	// rÃ©glage de la vitesse du jeu
+	/**
+	 *  Réglage de la vitesse du jeu
+	 * @param speed : Vitesse du jeu
+	 */
 	public void setSpeed(double speed) {
 		this.pGame.setTime(speed);
 	}

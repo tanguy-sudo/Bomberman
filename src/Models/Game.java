@@ -1,8 +1,12 @@
 package Models;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-
-import View.PanelBomberman;
+import Utils.AgentAction;
+/**
+ * 
+ * @author tanguy
+ * Classe Qui implémente les fonctions principales d'une partie
+ */
 public abstract class Game implements Runnable{
 	//Attributs
 	private int pTurn;
@@ -12,27 +16,31 @@ public abstract class Game implements Runnable{
 	private long pTime;
 	protected PropertyChangeSupport pSupport;
 	
-	//Constructeur
+	/**
+	 * Constructeur
+	 * @param maxturn: Nombre maximum de tour
+	 */
 	public Game(int maxturn){
 		this.pMaxturn = maxturn;
 		this.pTime = 1000;
 		this.pSupport = new PropertyChangeSupport(this);
 	}
 	
-	// Initialise le jeu
+	/**
+	 *  Initialise le jeu
+	 */
 	public void init() {
 		this.pTurn = 0;
 		int value = 0;
 		pSupport.firePropertyChange("pTurn", this.pTurn, value);
-		this.pIsRunning = true;
-
-		
+		this.pIsRunning = true;		
 		this.initializeGame();
 	}
 	
-	// Effectue un seul tour du jeu
-	public void step() {
-		
+	/**
+	 *  Effectue un seul tour du jeu
+	 */
+	public void step() {	
 		if(this.gameContinue() && this.pTurn < this.pMaxturn) {
 			int value = this.pTurn + 1;
 			pSupport.firePropertyChange("pTurn", this.pTurn, value);
@@ -45,7 +53,9 @@ public abstract class Game implements Runnable{
 		}
 	}
 	
-	// lance le jeu en pas Ã  pas
+	/**
+	 *  Lance le jeu en pas à pas
+	 */
 	public void run() {
 		while(this.pIsRunning) {
 			this.step();
@@ -58,38 +68,59 @@ public abstract class Game implements Runnable{
 		}
 	}
 	
-	// Met en pause le jeu
+	/**
+	 *  Mets en pause le jeu
+	 */
 	public void pause() {
 		this.pIsRunning = false;
 	}
 	
+	/**
+	 * Lance une partie
+	 */
 	public void launch() {
 		this.pIsRunning = true;
 		this.pThread = new Thread(this);
 		this.pThread.start();
 	}
 	
+	/**
+	 * Ajoute un observer
+	 * @param pcl
+	 */
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
     	pSupport.addPropertyChangeListener(pcl);
     }
 
+    /**
+     * Ajoute un observer
+     * @param pcl
+     */
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
     	pSupport.removePropertyChangeListener(pcl);
     }
    
+    /**
+     * 
+     * @return Le nombre de tours effectué
+     */
     public int getTurn() {
     	return this.pTurn;
     }
     
-    // Modifie la vitesse du jeu
+    /**
+     *  Modifie la vitesse du jeu
+     * @param speed
+     */
     public void setTime(double speed) {
     	this.pTime = (long) (1000 / speed);
     }
 	
-	//Mï¿½thodes abstraite
+	//Méthodes abstraite
 	public abstract void gameOver();
 	public abstract void takeTurn();
 	public abstract void initializeGame();
 	public abstract boolean gameContinue();
 	public abstract void restart(String mapName);
+	public abstract void updateActionUser(AgentAction action);
 }

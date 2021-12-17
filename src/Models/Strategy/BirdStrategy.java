@@ -1,12 +1,12 @@
 package Models.Strategy;
-
-import java.util.Random;
-
 import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
-import Utils.InfoAgent;
-
+/**
+ * Le Bird fonce vers l'ennemie quand il rentre dans sa zone 
+ * @author tanguy
+ *
+ */
 public class BirdStrategy extends Strategy{
 
 	@Override

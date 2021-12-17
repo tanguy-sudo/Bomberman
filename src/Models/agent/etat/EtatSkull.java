@@ -1,7 +1,11 @@
 package Models.agent.etat;
 
 import Models.agent.Agent;
-
+/**
+ * Classe indiquant l'état skull
+ * @author tanguy
+ *
+ */
 public class EtatSkull implements EtatAgent{
 	
 	private Agent pAgent;

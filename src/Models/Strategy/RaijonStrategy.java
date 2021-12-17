@@ -1,11 +1,15 @@
 package Models.Strategy;
 
 import java.util.Random;
-
 import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
-
+/**
+ * 
+ * @author tanguy
+ * S'il est invincible fonce vers le bomberman
+ * Il peut manger ses alliées
+ */
 public class RaijonStrategy extends Strategy{
 	@Override
 	public AgentAction generateAction(Agent agent, BombermanGame game) {

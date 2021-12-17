@@ -5,7 +5,11 @@ import java.util.Random;
 import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
-
+/**
+ * Stratégie aléatoire
+ * @author tanguy
+ *
+ */
 public class SimpleStrategy extends Strategy{
 
 	public AgentAction generateAction(Agent agent, BombermanGame game) {

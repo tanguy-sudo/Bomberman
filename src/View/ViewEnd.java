@@ -14,7 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import Controller.ControllerBombermanGame;
-
+/**
+ * Vue de fin de partie
+ * @author tanguy
+ *
+ */
 public class ViewEnd {
 	private JFrame window;
 	private JLabel valueNbEnemiesDeadLabel;

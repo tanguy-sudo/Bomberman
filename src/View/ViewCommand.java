@@ -5,11 +5,8 @@ import Controller.States.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Icon;
@@ -22,7 +19,11 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
+/**
+ * Vue des commandes de la partie
+ * @author tanguy
+ *
+ */
 public class ViewCommand implements PropertyChangeListener {
 	
 	private JLabel pNumberOfTurnJLabel ;
@@ -40,7 +41,7 @@ public class ViewCommand implements PropertyChangeListener {
 		
 		this.pAbstractController = abstractController;
 		
-		// crÃ©ation de l'interface graphique
+		// création de l'interface graphique
 		window = new JFrame("Command (map : " + fileName + ", level : " + niveau +")");
 		
 		JPanel globalpanel = new JPanel();
@@ -114,7 +115,7 @@ public class ViewCommand implements PropertyChangeListener {
 		this.etat = new EtatRestart(this);
 		
 		
-		// Ajout des Ã©couteurs d'actions sur les boutons
+		// Ajout des écouteurs d'actions sur les boutons
 		this.restartButton.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

@@ -1,11 +1,16 @@
 package Models.Strategy;
 
 import java.util.Random;
-
 import Models.BombermanGame;
 import Models.agent.Agent;
 import Utils.AgentAction;
-
+/**
+ * le Bomberman recule quand l'ennemi est trop proche, pose des bombes s'il est proche d'un ennemi ou d'un mur cassable
+ * Si le bomberman est invincible il fonce vers l'ennemie
+ * Si le Bomberman n'a personne dans un rayon de 5 il fonc vers le premier ennemi de la liste
+ * @author tanguy
+ *
+ */
 public class BombermanStrategy extends Strategy{
 
 	@Override

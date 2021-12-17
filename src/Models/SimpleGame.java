@@ -1,8 +1,17 @@
 package Models;
 
+import Utils.AgentAction;
+/**
+ * 
+ * @author tanguy
+ * Classe de test 
+ */
 public class SimpleGame extends Game  {
 	
-	//Constructeur
+	/**
+	 * Constructeur de la classe
+	 * @param maxturn
+	 */
 	public SimpleGame(int maxturn){
 		super(maxturn);
 	}
@@ -30,6 +39,12 @@ public class SimpleGame extends Game  {
 	
 	@Override
 	public void restart(String mapName) {
+		
+	}
+
+	@Override
+	public void updateActionUser(AgentAction action) {
+		// TODO Auto-generated method stub
 		
 	}
 
