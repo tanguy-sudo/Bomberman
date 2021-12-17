@@ -7,6 +7,7 @@ import Utils.InfoAgent;
 import View.PanelBomberman;
 import View.ViewBombermanGame;
 import View.ViewCommand;
+import View.ViewEnd;
 import View.ViewStart;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class ControllerBombermanGame extends AbstractController{
 	private PanelBomberman pPanelBomberman;
 	private ViewBombermanGame pViewBombermanGame;
 	private InputMap pInputMap;
+	private ViewEnd pViewEnd;
 	
 	public ControllerBombermanGame() {
 		this.pMapName = "";
@@ -22,7 +24,8 @@ public class ControllerBombermanGame extends AbstractController{
 		this.pPanelBomberman = null;
 		this.pViewBombermanGame = null;
 		this.pGame = null;
-		ViewStart viewstart = new ViewStart(this);
+		this.pViewEnd = null;
+		this.lunchViewStart();
 	}	
 	
 	public void lunchGame(String pathLayout, String niveau, String fileName) {
@@ -38,13 +41,45 @@ public class ControllerBombermanGame extends AbstractController{
 			
 			ViewCommand viewCommand = new ViewCommand(this, fileName, niveau);
 			
-			this.pGame = new BombermanGame(10000, this.pInputMap, Integer.parseInt(niveau));
+			this.pGame = new BombermanGame(10000, this.pInputMap, Integer.parseInt(niveau), this);
 			this.pGame.addPropertyChangeListener(viewCommand);
 			this.pGame.init();
 			this.pGame.addPropertyChangeListener(this.pViewBombermanGame);		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.getMessage();
 		}
+	}
+	
+	public void lunchViewEnd(int result, ArrayList<Agent> listAgentEnemy, ArrayList<Agent> listAgentAlly) {
+		int countAgent = 0;
+		int countEnemy = 0;
+		
+		for(Agent agent : listAgentAlly) {
+			if(agent.getLiving()) countAgent = countAgent + 1;
+		}
+		for(Agent agent : listAgentEnemy) {
+			if(agent.getLiving()) countEnemy = countEnemy + 1;
+		}	
+		if(pViewEnd == null) {
+			this.pViewEnd = new ViewEnd(
+					result, 
+					listAgentEnemy.size() - countEnemy, 
+					countEnemy,
+					listAgentAlly.size() - countAgent, 
+					countAgent, 
+					this);
+		}else {
+			this.pViewEnd.setInformation(					
+					result, 
+					listAgentEnemy.size() - countEnemy, 
+					countEnemy,
+					listAgentAlly.size() - countAgent, 
+					countAgent);
+		}
+	}
+	
+	public void lunchViewStart() {
+		ViewStart viewStart = new ViewStart(this);
 	}
 }

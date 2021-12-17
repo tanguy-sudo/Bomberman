@@ -23,7 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-public class ViewCommand implements PropertyChangeListener, WindowListener {
+public class ViewCommand implements PropertyChangeListener {
 	
 	private JLabel pNumberOfTurnJLabel ;
 	private AbstractController pAbstractController;
@@ -42,7 +42,6 @@ public class ViewCommand implements PropertyChangeListener, WindowListener {
 		
 		// création de l'interface graphique
 		window = new JFrame("Command (map : " + fileName + ", level : " + niveau +")");
-		window.addWindowListener(this);
 		
 		JPanel globalpanel = new JPanel();
 		JPanel highpanel = new JPanel();
@@ -110,6 +109,7 @@ public class ViewCommand implements PropertyChangeListener, WindowListener {
 		// Affiche l'interface
 		window.setVisible(true);
 		window.setResizable(false);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.etat = new EtatRestart(this);
 		
@@ -169,49 +169,5 @@ public class ViewCommand implements PropertyChangeListener, WindowListener {
 	
 	public void setEtat(Etat etat) {
 		this.etat = etat;
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		System.gc();
-		for (Window w : Window.getWindows()) {
-		    w.dispose();
-		}
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

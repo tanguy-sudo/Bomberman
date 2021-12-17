@@ -30,10 +30,6 @@ public class ViewStart {
 	
 		JFrame window = new JFrame("Bomberman");
 		JPanel globalpanel = new JPanel();
-		JPanel choiceJPanel = new JPanel();
-		JPanel mapJPanel = new JPanel();
-		JPanel levelJPanel = new JPanel();
-		JPanel playJPanel = new JPanel();
 		
 		GridLayout globalGridlayout = new GridLayout(5, 1);
 		
